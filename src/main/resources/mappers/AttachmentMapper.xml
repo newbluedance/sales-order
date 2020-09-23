@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hdtd.ibasebuild.business.mapper.AttachmentMapper">
+    <update id="deleteByModuleData">
+       update
+        attachment set deleted='1'
+        WHERE
+        module_name = #{moduleName}
+        and module_data_code= #{moduleDataCode}
+
+  </update>
+
+</mapper>
