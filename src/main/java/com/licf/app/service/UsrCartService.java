@@ -4,6 +4,8 @@ import com.common.base.BaseService;
 import com.common.net.RestResponse;
 import com.licf.app.entity.dto.UsrCartParam;
 import com.licf.app.entity.dto.UsrCartResult;
+import com.licf.bgManage.entity.BgGoods;
+import com.licf.bgManage.entity.dto.BgGoodsResult;
 
 import java.util.List;
 
@@ -14,7 +16,7 @@ import java.util.List;
  */
 public interface UsrCartService extends BaseService<UsrCartParam, UsrCartResult> {
 
-    List<UsrCartParam> query();
+    List<UsrCartResult> query();
     boolean save(UsrCartParam param);
 
 }

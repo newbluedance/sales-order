@@ -2,6 +2,8 @@ package com.licf.bgManage.entity.dto;
 
 import com.common.base.BaseResult;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -36,7 +38,7 @@ public class BgEmployeeResult extends BaseResult {
     private String position;
 
     /** 角色id */
-    private Integer roleId;
+    private Integer[] roleIds;
 
     /** 状态 */
     private String status;

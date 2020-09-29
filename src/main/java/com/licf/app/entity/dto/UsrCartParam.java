@@ -20,7 +20,7 @@ import java.util.List;
 public class UsrCartParam extends BaseParam {
 
     /** 商品信息 */
-    private String goodId;
+    private Integer goodId;
 
     private int num;
 

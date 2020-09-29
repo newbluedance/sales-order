@@ -76,7 +76,7 @@ public class UsrOrderParam extends BaseParam {
 
     /** 订单状态 0 待审核,1 待发货,2 待核销,3 退货 */
     @Length(max = 255, groups = {Update.class,Add.class}, message = "订单状态过长")
-    private String status;
+    private EOrderStatus status;
 
     /** 原因 */
     @Length(max = 255, groups = {Update.class,Add.class}, message = "原因过长")

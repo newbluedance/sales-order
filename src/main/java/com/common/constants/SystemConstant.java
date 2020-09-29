@@ -8,6 +8,8 @@ public interface SystemConstant {
 
     String LOGIN_USER_KEY_PREFIX="login_user_";
 
-    String REDIS_KEY_CAPTCHA = "captcha-";
+    String GOOD_KEY_PREFIX="good_";
+
+    String REDIS_KEY_CAPTCHA = "captcha_";
 
 }

@@ -13,10 +13,10 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 拦截未登录的请求
- *
  * @author lichunfeng
  */
 public class LoginInterceptor implements HandlerInterceptor {
@@ -33,17 +33,20 @@ public class LoginInterceptor implements HandlerInterceptor {
             String redisToken;
             // 从 request 中获取 Token 值
             String tokenStr = JwtUtils.getTokenFromRequest(request);
-            System.out.println(tokenStr);
-
 
             BgEmployee loginUser = JwtUtils.getLoginUserFromToken(tokenStr);
 
             BgEmployee loginAdmin = (BgEmployee) redisTemplate.opsForValue().get(SystemConstant.LOGIN_USER_KEY_PREFIX.concat(loginUser.getAccount()));
-            request.setAttribute("loginUser", loginAdmin);
-
-            /*redisTemplate.expire(SystemConstant.LOGIN_USER_KEY_PREFIX.concat(loginUser.getUsername()), 1200, TimeUnit.SECONDS);*/
-            return true;
-
+            if (loginAdmin != null) {
+                //redis失效时间20分钟
+                String redisKey = SystemConstant.LOGIN_USER_KEY_PREFIX.concat(loginAdmin.getAccount());
+                redisTemplate.expire(redisKey, 1200000L,
+                        TimeUnit.MILLISECONDS);
+                request.setAttribute("loginUser", loginAdmin);
+                return true;
+            } else {
+                throw new BusinessException(CodeConstant.NO_LOGIN, "请先登录!");
+            }
 
         } catch (Exception e) {
             throw new BusinessException(CodeConstant.NO_LOGIN, "请先登录!");

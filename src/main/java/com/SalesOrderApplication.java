@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 @SpringBootApplication(exclude = {MultipartAutoConfiguration.class})
-@MapperScan(basePackages = "com.licf.mapper.*")
+@MapperScan(basePackages = "com.licf.app.mapper.*")
 public class SalesOrderApplication {
 
     public static void main(String[] args) {

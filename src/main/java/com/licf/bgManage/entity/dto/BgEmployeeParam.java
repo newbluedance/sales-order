@@ -4,6 +4,8 @@ import com.common.base.BaseParam;
 import com.common.validation.group.Add;
 import com.common.validation.group.Update;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -44,7 +46,7 @@ public class BgEmployeeParam extends BaseParam {
     private String position;
 
     /** 角色id */
-    private Integer roleId;
+    private Integer[] roleIds;
 
     /** 状态 */
     @Length(max = 255, groups = {Update.class,Add.class}, message = "状态过长")

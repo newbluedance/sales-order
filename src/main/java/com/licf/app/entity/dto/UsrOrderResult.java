@@ -25,7 +25,7 @@ public class UsrOrderResult extends BaseResult {
     /** 订单编号 */
     private String orderNo;
 
-    private List<UsrCartParam> goods;
+    private List<UsrOrderGoodsShot> goods;
 
     /** 客户名称 */
     private String customerName;
@@ -64,7 +64,7 @@ public class UsrOrderResult extends BaseResult {
     private String logisticsNo;
 
     /** 订单状态 */
-    private String status;
+    private EOrderStatus status;
 
     /** 原因 */
     private String reason;

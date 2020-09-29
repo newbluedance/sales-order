@@ -64,7 +64,7 @@ public class LoginController {
         String newToken = JwtUtils.sign(loginBgEmployee.getId(), loginBgEmployee.getAccount());
         String redisKey = SystemConstant.LOGIN_USER_KEY_PREFIX.concat(loginBgEmployee.getAccount());
 
-        redisTemplate.opsForValue().set(SystemConstant.LOGIN_USER_KEY_PREFIX.concat(loginBgEmployee.getAccount()), loginBgEmployee);
+        redisTemplate.opsForValue().set(redisKey, loginBgEmployee);
         //redis失效时间20分钟
         redisTemplate.expire(redisKey, 1200000L,
                 TimeUnit.MILLISECONDS);

@@ -12,7 +12,6 @@ public interface CodeConstant {
     String ERROR_PARAMETER = "20201001";
 
 
-
     /** 登录错误 */
      String ERROR_LOGIN = "20201002";
 

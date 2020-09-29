@@ -2,6 +2,7 @@ package com.licf.bgManage.entity;
 
 import com.common.base.BaseEntity;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -50,7 +51,7 @@ public class BgEmployee extends BaseEntity {
 
     /** 角色id */
     @Column
-    private Integer roleId;
+    private Integer[] roleIds;
 
     /** 状态 */
     @Column

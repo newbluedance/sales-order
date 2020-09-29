@@ -18,7 +18,7 @@ import java.util.List;
 public interface UsrOrderConverter extends BaseConverter<UsrOrder, UsrOrderParam, UsrOrderResult> {
     UsrOrderConverter INSTANCE = Mappers.getMapper(UsrOrderConverter.class);
 
-    @Mapping(target = "goods", expression = "java(com.alibaba.fastjson.JSON.parseArray(entity.getOrderGoodsShot(), com.licf.app.entity.dto.UsrCartParam.class))")
+    @Mapping(target = "goods", expression = "java(com.alibaba.fastjson.JSON.parseArray(entity.getOrderGoodsShot(), com.licf.app.entity.dto.UsrOrderGoodsShot.class))")
     UsrOrderResult entityToResult(UsrOrder entity);
 
     List<UsrOrderResult> entityToResult(List<UsrOrder> entity);

@@ -1,6 +1,7 @@
 package com.licf.app.entity;
 
 import com.common.base.BaseEntity;
+import com.licf.app.entity.dto.EOrderStatus;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -83,7 +84,7 @@ public class UsrOrder extends BaseEntity {
 
     /** 订单状态 */
     @Column
-    private String status;
+    private EOrderStatus status;
 
     /** 原因 */
     @Column

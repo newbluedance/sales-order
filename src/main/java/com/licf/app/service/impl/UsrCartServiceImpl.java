@@ -4,19 +4,23 @@ import com.alibaba.fastjson.JSON;
 import com.common.base.BaseServiceImpl;
 import com.common.utils.LoginUtils;
 import com.licf.app.entity.UsrCart;
-import com.licf.app.entity.UsrOrder;
 import com.licf.app.entity.dto.UsrCartParam;
 import com.licf.app.entity.dto.UsrCartResult;
 import com.licf.app.mapper.UsrCartMapper;
 import com.licf.app.mapperstruct.UsrCartConverter;
 import com.licf.app.service.UsrCartService;
 import com.licf.bgManage.entity.BgEmployee;
+import com.licf.bgManage.entity.BgGoods;
+import com.licf.bgManage.mapper.BgGoodsMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author lichunfeng
@@ -25,12 +29,23 @@ import java.util.List;
 @Service
 public class UsrCartServiceImpl extends BaseServiceImpl<UsrCart, UsrCartParam, UsrCartResult> implements UsrCartService {
 
+    @Resource
+    BgGoodsMapper goodsMapper;
+
     @Override
-    public List<UsrCartParam> query() {
+    public List<UsrCartResult> query() {
         BgEmployee loginUser = LoginUtils.getLoginUser();
         UsrCart cart = mapper.selectByPrimaryKey(loginUser.getId());
         if (cart != null && StringUtils.isNotBlank(cart.getGoods())) {
-            return JSON.parseArray(cart.getGoods(), UsrCartParam.class);
+            List<UsrCartParam> usrCartParamList = JSON.parseArray(cart.getGoods(), UsrCartParam.class);
+            String goodIds = usrCartParamList.stream().map(t->t.getGoodId().toString()).collect(Collectors.joining(","));
+            List<BgGoods> bgGoods = goodsMapper.selectByIds(goodIds);
+            Map<Integer, BgGoods> goodsMap = bgGoods.stream().collect(Collectors.toMap(BgGoods::getId, BgGoods -> BgGoods));
+            List<UsrCartResult> usrCartResults = UsrCartConverter.INSTANCE.paramToResult(usrCartParamList);
+            for (UsrCartResult usrCartResult : usrCartResults) {
+                usrCartResult.setGood(goodsMap.get(usrCartResult.getGoodId()));
+            }
+            return usrCartResults;
         }
         return new ArrayList<>(0);
     }
@@ -42,7 +57,9 @@ public class UsrCartServiceImpl extends BaseServiceImpl<UsrCart, UsrCartParam, U
         if (cart == null) {
             cart = new UsrCart();
             cart.setEmployeeId(loginUser.getId());
-            cart.setGoods(param.toString());
+            List<UsrCartParam> goods = new ArrayList<>(1);
+            goods.add(param);
+            cart.setGoods(JSON.toJSON(goods).toString());
             mapper.insert(cart);
         } else {
             String goodStrs = cart.getGoods();

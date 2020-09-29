@@ -74,5 +74,21 @@ public interface BaseConverter<E extends BaseEntity, P extends BaseParam, R exte
      */
     List<P> resultToParam(List<R> std);
 
+    /**
+     * result 转 param
+     *
+     * @param std
+     * @return
+     */
+    R paramToResult(P std);
+
+    /**
+     * result 转 param
+     *
+     * @param std
+     * @return
+     */
+    List<R> paramToResult(List<P> std);
+
 
 }
