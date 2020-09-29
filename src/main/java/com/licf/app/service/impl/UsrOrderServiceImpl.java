@@ -59,6 +59,8 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
             BgGoods bgGood = redisHelper.getGood(goodsShot.getGoodId());
             goodsShot.setGoodName(bgGood.getGoodsName());
             goodsShot.setGoodPrice(bgGood.getPrice());
+            goodsShot.setSpecifications(bgGood.getSpecifications());
+            goodsShot.setUnit(bgGood.getUnit());
         }
 
         usrOrder.setOrderNo(IdUtil.createIdByDate());
@@ -77,6 +79,10 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
         boolean isReviewer = ArrayUtils.contains(roleIds, 4);
         if (!isReviewer) {
             throw new BusinessException(CodeConstant.UNDIFINE, "你不是审核人员!");
+        }
+        UsrOrder curOrder = mapper.selectByPrimaryKey(param.getId());
+        if (EOrderStatus.PENDING_REVIEW != curOrder.getStatus()) {
+            throw new BusinessException(CodeConstant.UNDIFINE, "订单已不是待审核状态!");
         }
 
         UsrOrder usrOrder = new UsrOrder();
@@ -99,6 +105,10 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
         if (!isReviewer) {
             throw new BusinessException(CodeConstant.UNDIFINE, "你不是发货人员!");
         }
+        UsrOrder curOrder = mapper.selectByPrimaryKey(param.getId());
+        if (EOrderStatus.PENDING_DELIVER != curOrder.getStatus()) {
+            throw new BusinessException(CodeConstant.UNDIFINE, "订单已不是待发货状态!");
+        }
 
         UsrOrder usrOrder = new UsrOrder();
         usrOrder.setId(param.getId());
@@ -110,6 +120,41 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
             usrOrder.setLogisticsName(param.getLogisticsName());
             usrOrder.setLogisticsNo(param.getLogisticsNo());
         }
+        mapper.updateByPrimaryKeySelective(usrOrder);
+        return true;
+    }
+
+    @Override
+    public boolean writeOff(UsrOrderWriteOff param) {
+        BgEmployee loginUser = LoginUtils.getLoginUser();
+        Integer[] roleIds = loginUser.getRoleIds();
+        boolean isReviewer = ArrayUtils.contains(roleIds, 6);
+        if (!isReviewer) {
+            throw new BusinessException(CodeConstant.UNDIFINE, "你不是财务人员!");
+        }
+        UsrOrder curOrder = mapper.selectByPrimaryKey(param.getId());
+        if (EOrderStatus.WRITE_OFF == param.getStatus()) {
+            if (EOrderStatus.PENDING_WRITE_OFF != curOrder.getStatus()) {
+                throw new BusinessException(CodeConstant.UNDIFINE, "订单已不是待核销状态!");
+            }
+        } else if (EOrderStatus.WRITE_BAD_DEBTS == param.getStatus()) {
+            if (EOrderStatus.PENDING_WRITE_OFF != curOrder.getStatus()) {
+                throw new BusinessException(CodeConstant.UNDIFINE, "订单已不是待核销状态!");
+            }
+        } else if (EOrderStatus.RETURN_GOODS == param.getStatus()) {
+            if (EOrderStatus.WRITE_OFF != curOrder.getStatus() || EOrderStatus.PENDING_WRITE_OFF != curOrder.getStatus()) {
+                throw new BusinessException(CodeConstant.UNDIFINE, "订单不是待核销或已核销状态,无法退货!");
+            }
+        } else {
+            throw new BusinessException(CodeConstant.UNDIFINE, "你无法进行此操作!");
+        }
+
+
+        UsrOrder usrOrder = new UsrOrder();
+        usrOrder.setId(param.getId());
+        usrOrder.setStatus(param.getStatus());
+        usrOrder.setReason(param.getReason());
+
         mapper.updateByPrimaryKeySelective(usrOrder);
         return true;
     }

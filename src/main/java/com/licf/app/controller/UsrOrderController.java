@@ -4,10 +4,7 @@ import com.common.base.DivPageInfo;
 import com.common.net.RestResponse;
 import com.common.utils.LoginUtils;
 import com.common.validation.group.Add;
-import com.licf.app.entity.dto.UsrOrderDeliver;
-import com.licf.app.entity.dto.UsrOrderParam;
-import com.licf.app.entity.dto.UsrOrderResult;
-import com.licf.app.entity.dto.UsrOrderReview;
+import com.licf.app.entity.dto.*;
 import com.licf.app.service.UsrOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -58,7 +55,7 @@ public class UsrOrderController {
      * @param param 插入对象
      * @return RestResponse
      */
-    @PostMapping("/add")
+    @PostMapping
     public RestResponse add(@Validated(Add.class) @RequestBody UsrOrderParam param) {
         UsrOrderService.add(param);
         return RestResponse.success();
@@ -69,7 +66,7 @@ public class UsrOrderController {
      * @param param 更新对象
      * @return RestResponse
      */
-    @PostMapping
+    @PostMapping("/review")
     public RestResponse review(@Validated @RequestBody UsrOrderReview param) {
         UsrOrderService.review(param);
         return RestResponse.success();
@@ -80,9 +77,20 @@ public class UsrOrderController {
      * @param param 更新对象
      * @return RestResponse
      */
-    @PostMapping
+    @PostMapping("/deliver")
     public RestResponse deliver(@Validated @RequestBody UsrOrderDeliver param) {
         UsrOrderService.deliver(param);
+        return RestResponse.success();
+    }
+
+    /**
+     * 核销
+     * @param param 更新对象
+     * @return RestResponse
+     */
+    @PostMapping("/writeOff")
+    public RestResponse writeOff(@Validated @RequestBody UsrOrderWriteOff param) {
+        UsrOrderService.writeOff(param);
         return RestResponse.success();
     }
 }

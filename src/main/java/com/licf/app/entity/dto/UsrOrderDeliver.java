@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * @date 2020-08-24 18:34:54
  */
 @Data
-public class UsrOrderDeliver extends BaseParam {
+public class UsrOrderDeliver {
 
     /** ID主键自增 */
     @NotNull(message = "id不能为空!")

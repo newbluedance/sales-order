@@ -21,4 +21,10 @@ public class UsrOrderGoodsShot {
     private BigDecimal goodPrice;
 
     private Integer num;
+
+    /** 规格 */
+    private String specifications;
+
+    /** 单位 */
+    private String unit;
 }
