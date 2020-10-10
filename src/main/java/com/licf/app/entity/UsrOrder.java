@@ -48,7 +48,7 @@ public class UsrOrder extends BaseEntity {
 
     /** 所属部门 */
     @Column
-    private String departmentId;
+    private Integer departmentId;
 
     /** 订单金额 */
     @Column
@@ -109,4 +109,5 @@ public class UsrOrder extends BaseEntity {
     /** 更新人 */
     @Column
     private String updatedBy;
+
 }

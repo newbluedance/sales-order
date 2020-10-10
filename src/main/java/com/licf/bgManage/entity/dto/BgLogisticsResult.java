@@ -1,8 +1,9 @@
 package com.licf.bgManage.entity.dto;
 
 import com.common.base.BaseResult;
-import java.time.LocalDateTime;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * 
@@ -16,6 +17,9 @@ public class BgLogisticsResult extends BaseResult {
 
     /** ID主键自增 */
     private Integer id;
+
+    /** 物流名称 */
+    private String logisticsEN;
 
     /** 物流名称 */
     private String logisticsName;

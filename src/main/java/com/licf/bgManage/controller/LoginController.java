@@ -11,9 +11,9 @@ import com.licf.bgManage.entity.dto.LoginToken;
 import com.licf.bgManage.mapper.BgEmployeeMapper;
 import com.licf.bgManage.mapperstruct.BgEmployeeConverter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -50,7 +50,7 @@ public class LoginController {
         if (loginBgEmployee == null) {
             return new RestResponse(CodeConstant.ERROR_LOGIN, "用户不存在");
         }
-        if (!password.equals(loginBgEmployee.getPassword()) && !DigestUtils.md5Digest(password.getBytes()).equals(loginBgEmployee.getPassword())) {
+        if (!password.equals(loginBgEmployee.getPassword()) && !DigestUtils.md5Hex(password).equals(loginBgEmployee.getPassword())) {
             return new RestResponse(CodeConstant.ERROR_LOGIN, "密码不正确");
         }
         if (YesNoConstant.YES.equals(loginBgEmployee.getDeleted())) {
@@ -65,8 +65,8 @@ public class LoginController {
         String redisKey = SystemConstant.LOGIN_USER_KEY_PREFIX.concat(loginBgEmployee.getAccount());
 
         redisTemplate.opsForValue().set(redisKey, loginBgEmployee);
-        //redis失效时间20分钟
-        redisTemplate.expire(redisKey, 1200000L,
+        //redis失效时间60分钟
+        redisTemplate.expire(redisKey, 3600000L,
                 TimeUnit.MILLISECONDS);
 
         BgEmployeeResult adminResult = BgEmployeeConverter.INSTANCE.entityToResult(loginBgEmployee);
@@ -83,7 +83,6 @@ public class LoginController {
         String redisToken = null;
         // 从 request 中获取 Token 值
         String tokenStr = JwtUtils.getTokenFromRequest(request);
-
 
         BgEmployee loginUser = JwtUtils.getLoginUserFromToken(tokenStr);
 

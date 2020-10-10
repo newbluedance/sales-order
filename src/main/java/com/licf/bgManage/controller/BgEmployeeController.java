@@ -1,13 +1,19 @@
 package com.licf.bgManage.controller;
 
+import com.common.BusinessException;
+import com.common.authory.RequiredPermission;
 import com.common.base.DivPageInfo;
+import com.common.constants.CodeConstant;
+import com.common.net.RestResponse;
+import com.common.utils.LoginUtils;
+import com.common.validation.group.Add;
+import com.common.validation.group.Update;
+import com.licf.bgManage.entity.BgEmployee;
 import com.licf.bgManage.entity.dto.BgEmployeeParam;
 import com.licf.bgManage.entity.dto.BgEmployeeResult;
 import com.licf.bgManage.service.BgEmployeeService;
-import com.common.net.RestResponse;
-import com.common.validation.group.Add;
-import com.common.validation.group.Update;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -29,7 +35,7 @@ public class BgEmployeeController {
 
     /**
      * 根据条件获取分页list
-     * @param param 持有查询条件
+     * @param param    持有查询条件
      * @param pageable 持有排序字段,和分页条件
      * @return RestResponse 持有分页对象
      */
@@ -44,6 +50,7 @@ public class BgEmployeeController {
      * @return RestResponse
      */
     @PostMapping
+    @RequiredPermission(roles = "1,2")
     public RestResponse insert(@Validated(Add.class) @RequestBody BgEmployeeParam param) {
         bgEmployeeService.insert(param);
         return RestResponse.success();
@@ -55,6 +62,7 @@ public class BgEmployeeController {
      * @return RestResponse
      */
     @PutMapping
+    @RequiredPermission(roles = "1,2")
     public RestResponse update(@Validated(Update.class) @RequestBody BgEmployeeParam param) {
         bgEmployeeService.update(param);
         return RestResponse.success();
@@ -66,8 +74,10 @@ public class BgEmployeeController {
      * @return RestResponse
      */
     @DeleteMapping("/{id}")
+    @RequiredPermission(roles = "1,2")
     public RestResponse deleteBgEmployee(@PathVariable int id) {
         bgEmployeeService.deleteById(id);
         return RestResponse.success();
     }
+
 }

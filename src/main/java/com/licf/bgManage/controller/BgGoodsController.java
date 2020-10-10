@@ -1,6 +1,7 @@
 package com.licf.bgManage.controller;
 
 import com.common.base.DivPageInfo;
+import com.common.utils.RedisHelper;
 import com.licf.bgManage.entity.dto.BgGoodsParam;
 import com.licf.bgManage.entity.dto.BgGoodsResult;
 import com.licf.bgManage.service.BgGoodsService;
@@ -24,6 +25,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("bgManage/bgGoods")
 public class BgGoodsController {
+
     @Resource
     private BgGoodsService bgGoodsService;
 
@@ -56,6 +58,7 @@ public class BgGoodsController {
      */
     @PutMapping
     public RestResponse update(@Validated(Update.class) @RequestBody BgGoodsParam param) {
+        RedisHelper.clearGood(param.getId());
         bgGoodsService.update(param);
         return RestResponse.success();
     }
@@ -67,6 +70,7 @@ public class BgGoodsController {
      */
     @DeleteMapping("/{id}")
     public RestResponse deleteBgGoods(@PathVariable int id) {
+        RedisHelper.clearGood(id);
         bgGoodsService.deleteById(id);
         return RestResponse.success();
     }

@@ -29,7 +29,7 @@ public class BgEmployeeResult extends BaseResult {
     private String account;
 
     /** 密码 */
-    private String password;
+//    private String password;
 
     /** 所属部门id */
     private Integer departmentId;

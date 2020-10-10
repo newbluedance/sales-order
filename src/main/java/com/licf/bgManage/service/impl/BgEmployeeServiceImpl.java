@@ -1,14 +1,23 @@
 package com.licf.bgManage.service.impl;
 
 import com.common.base.BaseServiceImpl;
+import com.common.constants.SystemConstant;
+import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.page.PageMethod;
 import com.licf.bgManage.entity.BgEmployee;
 import com.licf.bgManage.entity.dto.BgEmployeeParam;
 import com.licf.bgManage.entity.dto.BgEmployeeResult;
 import com.licf.bgManage.mapper.BgEmployeeMapper;
 import com.licf.bgManage.mapperstruct.BgEmployeeConverter;
 import com.licf.bgManage.service.BgEmployeeService;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * 
@@ -17,9 +26,35 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BgEmployeeServiceImpl extends BaseServiceImpl<BgEmployee, BgEmployeeParam, BgEmployeeResult> implements BgEmployeeService {
-    @Autowired
-    public void init(BgEmployeeMapper bgCustomerMapper, BgEmployeeConverter bgCustomerConverter){
-        super.initMapperConverter(bgCustomerMapper, bgCustomerConverter);
+
+    @Resource
+    BgEmployeeMapper bgEmployeeMapper;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Override
+    public void clearRedisAuthenticationInfo(String account) {
+        // 清除用户存储在缓存中的权限信息
+        redisTemplate.delete(SystemConstant.LOGIN_USER_KEY_PREFIX.concat(account));
+    }
+
+    @Override
+    public void insert(BgEmployeeParam param) {
+        BgEmployee bgEmployee = converter.paramToEntity(param);
+        bgEmployee.setPassword(DigestUtils.md5Hex(param.getPassword()));
+        bgEmployeeMapper.insertSelectiveGeneratedKeys(bgEmployee);
+    }
+
+    @Override
+    public void update(BgEmployeeParam param) {
+        BgEmployee bgEmployee = converter.paramToEntity(param);
+        if (StringUtils.isNotEmpty(param.getPassword())){
+            bgEmployee.setPassword(DigestUtils.md5Hex(param.getPassword()));
+        }
+        bgEmployeeMapper.updateByPrimaryKeySelective(bgEmployee);
+        // 清除用户存储在缓存中的权限信息
+        clearRedisAuthenticationInfo(bgEmployee.getAccount());
     }
 
     @Override
@@ -28,5 +63,12 @@ public class BgEmployeeServiceImpl extends BaseServiceImpl<BgEmployee, BgEmploye
         bgEmployee.setId(id);
         bgEmployee.setDeleted(1);
         mapper.updateByPrimaryKeySelective(bgEmployee);
+        // 清除用户存储在缓存中的权限信息
+        clearRedisAuthenticationInfo(bgEmployee.getAccount());
+    }
+    
+    @Autowired
+    public void init(BgEmployeeMapper bgCustomerMapper, BgEmployeeConverter bgCustomerConverter){
+        super.initMapperConverter(bgCustomerMapper, bgCustomerConverter);
     }
 }

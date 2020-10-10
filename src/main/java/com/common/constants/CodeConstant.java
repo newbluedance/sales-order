@@ -6,22 +6,25 @@ package com.common.constants;
 public interface CodeConstant {
 
     /** 成功 */
-    String SUCCESS = "20000";
+    String SUCCESS = "1000";
 
     /** 参数错误 */
-    String ERROR_PARAMETER = "20201001";
+    String ERROR_PARAMETER = "1001";
 
 
     /** 登录错误 */
-     String ERROR_LOGIN = "20201002";
+     String ERROR_LOGIN = "1002";
 
-    /** 登录错误 */
-    String NO_LOGIN = "20201003";
+    /** 未登录 */
+    String NO_LOGIN = "1003";
 
-    /** 重复提交 */
-    String DUPLICATE = "20201004";
+    /** 没有权限 */
+    String NO_PERMIT = "1004";
+
+    /** 重复操作 */
+    String DUPLICATE = "1005";
 
     /** 未知错误 */
-    String UNDIFINE = "20201009";
+    String UNDIFINE = "1009";
 
 }

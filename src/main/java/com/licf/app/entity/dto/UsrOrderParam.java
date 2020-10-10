@@ -44,7 +44,7 @@ public class UsrOrderParam extends BaseParam {
 
     /** 所属部门 */
     @Length(max = 255, groups = {Update.class,Add.class}, message = "所属部门过长")
-    private String departmentId;
+    private Integer departmentId;
 
     /** 实际金额 */
     @Length(max = 255, groups = {Update.class,Add.class}, message = "实际金额过长")
@@ -86,5 +86,8 @@ public class UsrOrderParam extends BaseParam {
     @Length(max = 255, groups = {Update.class,Add.class}, message = "注释过长")
     private String comments;
 
+    private LocalDateTime startTime;
+
+    private LocalDateTime endTime;
 
 }

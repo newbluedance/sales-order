@@ -19,6 +19,7 @@ public interface UsrOrderConverter extends BaseConverter<UsrOrder, UsrOrderParam
     UsrOrderConverter INSTANCE = Mappers.getMapper(UsrOrderConverter.class);
 
     @Mapping(target = "goods", expression = "java(com.alibaba.fastjson.JSON.parseArray(entity.getOrderGoodsShot(), com.licf.app.entity.dto.UsrOrderGoodsShot.class))")
+    @Mapping(target = "departmentName", expression = "java(com.common.utils.RedisHelper.getDept(entity.getDepartmentId()).getDepartmentName())")
     UsrOrderResult entityToResult(UsrOrder entity);
 
     List<UsrOrderResult> entityToResult(List<UsrOrder> entity);

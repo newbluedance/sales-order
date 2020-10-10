@@ -1,16 +1,14 @@
 package com.licf.app.entity.dto;
 
 import com.common.base.BaseResult;
+import com.common.utils.RedisHelper;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.licf.app.entity.dto.UsrCartParam;
-import lombok.Data;
-
 /**
- * 
  * @author lichunfeng
  * @date 2020-08-24 18:34:54
  */
@@ -37,7 +35,7 @@ public class UsrOrderResult extends BaseResult {
     private String salesman;
 
     /** 所属部门 */
-    private String departmentId;
+    private Integer departmentId;
 
     /** 订单金额 */
     private BigDecimal orderAmount;
@@ -83,4 +81,7 @@ public class UsrOrderResult extends BaseResult {
 
     /** 更新人 */
     private String updatedBy;
+
+    private String departmentName;
+
 }

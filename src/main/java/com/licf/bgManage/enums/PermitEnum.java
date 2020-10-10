@@ -38,16 +38,14 @@ public enum PermitEnum {
     RoleInsert("角色", "新增"),
     RoleQuery("角色", "查询"),
     RoleUpdate("角色", "修改"),
-    CartSave("购物车",""),
-    CartQuery("购物车",""),
-    OrderAdd("订单",""),
-    OrderQuerySelf("订单",""),
-    OrderQuery("订单",""),
-    OrderReview("订单",""),
-    OrderDeliver("订单",""),
-    OrderFinance("订单",""),
-    OrderCanCle("订单","");
-
+    CartSave("购物车","添加"),
+    CartQuery("购物车","查看"),
+    OrderAdd("订单","下订单"),
+    OrderQuerySelf("订单","查看自己的订单"),
+    OrderQuery("订单","查看所有订单"),
+    OrderReview("订单","审核"),
+    OrderDeliver("订单","发货"),
+    OrderWriteOff("订单","财务核销");
 
     private String module;
     private String permit;

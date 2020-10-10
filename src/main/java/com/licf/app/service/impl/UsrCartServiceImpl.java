@@ -11,7 +11,6 @@ import com.licf.app.mapper.UsrCartMapper;
 import com.licf.app.mapperstruct.UsrCartConverter;
 import com.licf.app.service.UsrCartService;
 import com.licf.bgManage.entity.BgEmployee;
-import com.licf.bgManage.mapper.BgGoodsMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,12 +26,6 @@ import java.util.List;
 @Service
 public class UsrCartServiceImpl extends BaseServiceImpl<UsrCart, UsrCartParam, UsrCartResult> implements UsrCartService {
 
-    @Resource
-    BgGoodsMapper goodsMapper;
-
-    @Resource
-    RedisHelper redisHelper;
-
     @Override
     public List<UsrCartResult> query() {
         BgEmployee loginUser = LoginUtils.getLoginUser();
@@ -41,7 +34,7 @@ public class UsrCartServiceImpl extends BaseServiceImpl<UsrCart, UsrCartParam, U
             List<UsrCartParam> usrCartParamList = JSON.parseArray(cart.getGoods(), UsrCartParam.class);
             List<UsrCartResult> usrCartResults = UsrCartConverter.INSTANCE.paramToResult(usrCartParamList);
             for (UsrCartResult usrCartResult : usrCartResults) {
-                usrCartResult.setGood(redisHelper.getGood(usrCartResult.getGoodId()));
+                usrCartResult.setGood(RedisHelper.getGood(usrCartResult.getGoodId()));
             }
             return usrCartResults;
         }

@@ -25,6 +25,10 @@ public class BgLogistics extends BaseEntity {
     private Integer id;
 
     /** 物流名称 */
+    @Column(name = "logistics_en")
+    private String logisticsEN;
+
+    /** 物流名称 */
     @Column
     private String logisticsName;
 

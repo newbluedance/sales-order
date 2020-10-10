@@ -21,6 +21,9 @@ public class BgLogisticsParam extends BaseParam {
     private Integer id;
 
     /** 物流名称 */
+    private String logisticsEN;
+
+    /** 物流名称 */
     @Length(max = 255, groups = {Update.class,Add.class}, message = "物流名称过长")
     private String logisticsName;
 

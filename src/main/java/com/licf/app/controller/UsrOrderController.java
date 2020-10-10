@@ -1,5 +1,6 @@
 package com.licf.app.controller;
 
+import com.common.authory.RequiredPermission;
 import com.common.base.DivPageInfo;
 import com.common.net.RestResponse;
 import com.common.utils.LoginUtils;
@@ -56,6 +57,7 @@ public class UsrOrderController {
      * @return RestResponse
      */
     @PostMapping
+    @RequiredPermission(roles = "1,3")
     public RestResponse add(@Validated(Add.class) @RequestBody UsrOrderParam param) {
         UsrOrderService.add(param);
         return RestResponse.success();
@@ -67,6 +69,7 @@ public class UsrOrderController {
      * @return RestResponse
      */
     @PostMapping("/review")
+    @RequiredPermission(roles = "1,4")
     public RestResponse review(@Validated @RequestBody UsrOrderReview param) {
         UsrOrderService.review(param);
         return RestResponse.success();
@@ -78,6 +81,7 @@ public class UsrOrderController {
      * @return RestResponse
      */
     @PostMapping("/deliver")
+    @RequiredPermission(roles = "1,5")
     public RestResponse deliver(@Validated @RequestBody UsrOrderDeliver param) {
         UsrOrderService.deliver(param);
         return RestResponse.success();
@@ -89,6 +93,7 @@ public class UsrOrderController {
      * @return RestResponse
      */
     @PostMapping("/writeOff")
+    @RequiredPermission(roles = "1,6")
     public RestResponse writeOff(@Validated @RequestBody UsrOrderWriteOff param) {
         UsrOrderService.writeOff(param);
         return RestResponse.success();

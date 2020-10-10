@@ -1,13 +1,12 @@
 package com.licf.bgManage.controller;
 
 import com.common.base.DivPageInfo;
-import com.common.utils.RedisHelper;
-import com.licf.bgManage.entity.dto.BgDepartmentParam;
-import com.licf.bgManage.entity.dto.BgDepartmentResult;
-import com.licf.bgManage.service.BgDepartmentService;
 import com.common.net.RestResponse;
 import com.common.validation.group.Add;
 import com.common.validation.group.Update;
+import com.licf.bgManage.entity.dto.BgBannerParam;
+import com.licf.bgManage.entity.dto.BgBannerResult;
+import com.licf.bgManage.service.BgBannerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,21 +22,22 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @RestController
-@RequestMapping("bgManage/bgDepartment")
-public class BgDepartmentController {
+@RequestMapping("bgManage/bgBanner")
+public class BgBannerController {
 
     @Resource
-    private BgDepartmentService bgDepartmentService;
+    private BgBannerService bgBannerService;
 
     /**
      * 根据条件获取分页list
+     * demo {{host28089}}/bgManage/bgBanner?size=1&page=0&sort=id,asc
      * @param param 持有查询条件
      * @param pageable 持有排序字段,和分页条件
      * @return RestResponse 持有分页对象
      */
     @GetMapping
-    public RestResponse<DivPageInfo<BgDepartmentResult>> page(BgDepartmentParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        return RestResponse.success(bgDepartmentService.pageList(param, pageable));
+    public RestResponse<DivPageInfo<BgBannerResult>> page(BgBannerParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        return RestResponse.success(bgBannerService.pageList(param, pageable));
     }
 
     /**
@@ -46,8 +46,8 @@ public class BgDepartmentController {
      * @return RestResponse
      */
     @PostMapping
-    public RestResponse insert(@Validated(Add.class) @RequestBody BgDepartmentParam param) {
-        bgDepartmentService.insert(param);
+    public RestResponse insert(@Validated(Add.class) @RequestBody BgBannerParam param) {
+        bgBannerService.insert(param);
         return RestResponse.success();
     }
 
@@ -57,9 +57,8 @@ public class BgDepartmentController {
      * @return RestResponse
      */
     @PutMapping
-    public RestResponse update(@Validated(Update.class) @RequestBody BgDepartmentParam param) {
-        RedisHelper.clearDept(param.getId());
-        bgDepartmentService.update(param);
+    public RestResponse update(@Validated(Update.class) @RequestBody BgBannerParam param) {
+        bgBannerService.update(param);
         return RestResponse.success();
     }
 
@@ -69,9 +68,8 @@ public class BgDepartmentController {
      * @return RestResponse
      */
     @DeleteMapping("/{id}")
-    public RestResponse deleteBgDepartment(@PathVariable int id) {
-        RedisHelper.clearDept(id);
-        bgDepartmentService.deleteById(id);
+    public RestResponse deleteBgBanner(@PathVariable int id) {
+        bgBannerService.deleteById(id);
         return RestResponse.success();
     }
 }
