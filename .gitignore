@@ -9,7 +9,9 @@ target/
 .settings/
 .project
 .classpath
+.gitignore
 
 .svn
 *.log
-dependency-reduced-pom.xml
+
+src/main/resources/
