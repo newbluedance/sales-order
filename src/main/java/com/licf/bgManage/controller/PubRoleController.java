@@ -38,36 +38,36 @@ public class PubRoleController {
         return RestResponse.success(pubRoleService.pageList(param, pageable));
     }
 
-    /**
-     * 新增
-     * @param param 插入对象
-     * @return RestResponse
-     */
-    @PostMapping
-    public RestResponse insert(@Validated(Add.class) @RequestBody PubRoleParam param) {
-        pubRoleService.insert(param);
-        return RestResponse.success();
-    }
-
-    /**
-     * 更新
-     * @param param 更新对象
-     * @return RestResponse
-     */
-    @PutMapping
-    public RestResponse update(@Validated(Update.class) @RequestBody PubRoleParam param) {
-        pubRoleService.update(param);
-        return RestResponse.success();
-    }
-
-    /**
-     * 删除单个
-     * @param id id
-     * @return RestResponse
-     */
-    @DeleteMapping("/{id}")
-    public RestResponse deletePubRole(@PathVariable int id) {
-        pubRoleService.deleteById(id);
-        return RestResponse.success();
-    }
+//    /**
+//     * 新增
+//     * @param param 插入对象
+//     * @return RestResponse
+//     */
+//    @PostMapping
+//    public RestResponse insert(@Validated(Add.class) @RequestBody PubRoleParam param) {
+//        pubRoleService.insert(param);
+//        return RestResponse.success();
+//    }
+//
+//    /**
+//     * 更新
+//     * @param param 更新对象
+//     * @return RestResponse
+//     */
+//    @PutMapping
+//    public RestResponse update(@Validated(Update.class) @RequestBody PubRoleParam param) {
+//        pubRoleService.update(param);
+//        return RestResponse.success();
+//    }
+//
+//    /**
+//     * 删除单个
+//     * @param id id
+//     * @return RestResponse
+//     */
+//    @DeleteMapping("/{id}")
+//    public RestResponse deletePubRole(@PathVariable int id) {
+//        pubRoleService.deleteById(id);
+//        return RestResponse.success();
+//    }
 }

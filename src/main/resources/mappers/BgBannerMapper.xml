@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.licf.bgManage.mapper.BgBannerMapper">
+    <select id="selectAllForId" resultType="com.licf.bgManage.entity.dto.BgBannerResult">
+        SELECT
+            id
+        FROM
+            bg_banner
+        ORDER BY order_num
+    </select>
 </mapper>

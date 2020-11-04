@@ -4,7 +4,9 @@ import com.common.base.BaseConverter;
 import com.licf.bgManage.entity.BgEmployee;
 import com.licf.bgManage.entity.dto.BgEmployeeParam;
 import com.licf.bgManage.entity.dto.BgEmployeeResult;
+import org.mapstruct.MapMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -15,4 +17,13 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface BgEmployeeConverter extends BaseConverter<BgEmployee, BgEmployeeParam, BgEmployeeResult> {
 BgEmployeeConverter INSTANCE = Mappers.getMapper(BgEmployeeConverter.class);
+
+    /**
+     * 实体类转result
+     *
+     * @param entity
+     * @return dto
+     */
+    @Mapping(ignore = true,target = "departmentName")
+    BgEmployeeResult entityToResult(BgEmployee entity);
 }

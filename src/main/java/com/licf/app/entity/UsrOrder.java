@@ -1,7 +1,7 @@
 package com.licf.app.entity;
 
 import com.common.base.BaseEntity;
-import com.licf.app.entity.dto.EOrderStatus;
+import com.licf.bgManage.enums.EOrderStatus;
 import lombok.Data;
 
 import javax.persistence.Column;

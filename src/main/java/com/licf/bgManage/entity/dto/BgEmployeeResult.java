@@ -4,10 +4,12 @@ import com.common.base.BaseResult;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.common.utils.RedisHelper;
+import com.licf.bgManage.entity.BgDepartment;
 import lombok.Data;
 
 /**
- * 
+ *
  * @author lichunfeng
  * @date 2020-08-24 18:34:54
  */
@@ -47,4 +49,13 @@ public class BgEmployeeResult extends BaseResult {
     private String comments;
 
    private String token;
+
+    public String getDepartmentName() {
+        if (departmentId != null) {
+            BgDepartment dept = RedisHelper.getDept(departmentId);
+            if (dept != null)
+                return dept.getDepartmentName();
+        }
+        return null;
+    }
 }

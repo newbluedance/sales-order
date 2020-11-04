@@ -10,6 +10,7 @@ public interface SystemConstant {
 
     String GOOD_KEY_PREFIX="good_";
     String DEPT_KEY_PREFIX="dept_";
+    String BANNER_KEY_PREFIX="banner_";
 
     String REDIS_KEY_CAPTCHA = "captcha_";
 

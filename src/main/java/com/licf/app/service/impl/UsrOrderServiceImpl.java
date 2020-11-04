@@ -23,6 +23,7 @@ import com.licf.app.mapperstruct.UsrOrderConverter;
 import com.licf.app.service.UsrOrderService;
 import com.licf.bgManage.entity.BgEmployee;
 import com.licf.bgManage.entity.BgGoods;
+import com.licf.bgManage.enums.EOrderStatus;
 import com.licf.bgManage.mapperstruct.BgGoodsConverter;
 import org.apache.commons.httpclient.NameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,15 +80,34 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
         usrOrder.setOrderGoodsShot(JSON.toJSONString(goodsShots));
         usrOrder.setSalesman(loginUser.getAccount());
         usrOrder.setCreateTime(LocalDateTime.now());
-        usrOrder.setStatus(EOrderStatus.PENDING_REVIEW);
+        usrOrder.setStatus(EOrderStatus.PENDING_LEADER_REVIEW);
         mapper.insert(usrOrder);
         return true;
     }
 
     @Override
-    public boolean review(UsrOrderReview param) {
+    public boolean leaderReview(UsrOrderReview param) {
         UsrOrder curOrder = mapper.selectByPrimaryKey(param.getId());
-        if (EOrderStatus.PENDING_REVIEW != curOrder.getStatus()) {
+        if (EOrderStatus.PENDING_LEADER_REVIEW != curOrder.getStatus()) {
+            throw new BusinessException(CodeConstant.UNDIFINE, "订单已不是待审核状态!");
+        }
+
+        UsrOrder usrOrder = new UsrOrder();
+        usrOrder.setId(param.getId());
+        if (param.isPass()) {
+            usrOrder.setStatus(EOrderStatus.PENDING_STORAGE_REVIEW);
+        } else {
+            usrOrder.setStatus(EOrderStatus.LEADER_REVIEW_REJECT);
+            usrOrder.setReason(param.getReason());
+        }
+        mapper.updateByPrimaryKeySelective(usrOrder);
+        return true;
+    }
+
+    @Override
+    public boolean storageReview(UsrOrderReview param) {
+        UsrOrder curOrder = mapper.selectByPrimaryKey(param.getId());
+        if (EOrderStatus.PENDING_STORAGE_REVIEW != curOrder.getStatus()) {
             throw new BusinessException(CodeConstant.UNDIFINE, "订单已不是待审核状态!");
         }
 
@@ -96,7 +116,7 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
         if (param.isPass()) {
             usrOrder.setStatus(EOrderStatus.PENDING_DELIVER);
         } else {
-            usrOrder.setStatus(EOrderStatus.REVIEW_REJECT);
+            usrOrder.setStatus(EOrderStatus.STORAGE_REVIEW_REJECT);
             usrOrder.setReason(param.getReason());
         }
         mapper.updateByPrimaryKeySelective(usrOrder);
@@ -233,6 +253,6 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
         //返回结果
         response = HttpUtils.sendRequest(url, data, "UTF-8", 5000);
         System.out.print(response);
-        return JSON.parseObject(response.getModel(),DbOrderResp.class);
+        return JSON.parseObject(response.getModel(), DbOrderResp.class);
     }
 }

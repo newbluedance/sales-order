@@ -1,12 +1,15 @@
-package com.licf.app.entity.dto;
+package com.licf.bgManage.enums;
 
 /**
  * @author: licf
  * @time: 2020/9/29 15:42
  */
 public enum EOrderStatus {
-    //待审核
-    PENDING_REVIEW,
+
+    // 待主管审核
+    PENDING_LEADER_REVIEW,
+    // 待仓库审核
+    PENDING_STORAGE_REVIEW,
     //待发货
     PENDING_DELIVER,
     //待核销
@@ -14,7 +17,9 @@ public enum EOrderStatus {
     //已核销
     WRITE_OFF,
     //审核拒绝
-    REVIEW_REJECT,
+    LEADER_REVIEW_REJECT,
+    //审核拒绝
+    STORAGE_REVIEW_REJECT,
     //发货拒绝
     DELIVER_REJECT,
     //核销坏账

@@ -2,6 +2,7 @@ package com.licf.bgManage.controller;
 
 import com.common.base.DivPageInfo;
 import com.common.net.RestResponse;
+import com.common.utils.RedisHelper;
 import com.common.validation.group.Add;
 import com.common.validation.group.Update;
 import com.licf.bgManage.entity.dto.BgBannerParam;
@@ -70,6 +71,7 @@ public class BgBannerController {
     @DeleteMapping("/{id}")
     public RestResponse deleteBgBanner(@PathVariable int id) {
         bgBannerService.deleteById(id);
+        RedisHelper.clearBanner(id);
         return RestResponse.success();
     }
 }

@@ -2,6 +2,10 @@ package com.licf.bgManage.entity.dto;
 
 import com.common.base.BaseResult;
 import java.time.LocalDateTime;
+
+import com.common.utils.RedisHelper;
+import com.licf.bgManage.entity.BgBanner;
+import com.licf.bgManage.entity.BgDepartment;
 import lombok.Data;
 
 /**
@@ -34,4 +38,11 @@ public class BgBannerResult extends BaseResult {
 
     /** 更新人 */
     private String updatedBy;
+
+    public String getImg() {
+        BgBanner banner = RedisHelper.getBanner(id);
+        if (banner != null)
+            return banner.getImg();
+        return null;
+    }
 }

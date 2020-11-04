@@ -1,5 +1,6 @@
 package com.licf.app.entity.dto;
 
+import com.licf.bgManage.enums.EOrderStatus;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 

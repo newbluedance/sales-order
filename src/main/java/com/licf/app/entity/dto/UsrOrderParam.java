@@ -3,14 +3,13 @@ package com.licf.app.entity.dto;
 import com.common.base.BaseParam;
 import com.common.validation.group.Add;
 import com.common.validation.group.Update;
+import com.licf.bgManage.enums.EOrderStatus;
+import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import com.licf.app.entity.dto.UsrCartParam;
-import lombok.Data;
-import org.hibernate.validator.constraints.Length;
 
 /**
  * 

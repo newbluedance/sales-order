@@ -64,14 +64,26 @@ public class UsrOrderController {
     }
 
     /**
-     * 审核
+     * 主管审核
      * @param param 更新对象
      * @return RestResponse
      */
-    @PostMapping("/review")
+    @PostMapping("/leaderReview")
     @RequiredPermission(roles = "1,4")
-    public RestResponse review(@Validated @RequestBody UsrOrderReview param) {
-        UsrOrderService.review(param);
+    public RestResponse leaderReview(@Validated @RequestBody UsrOrderReview param) {
+        UsrOrderService.leaderReview(param);
+        return RestResponse.success();
+    }
+
+    /**
+     * 审核员 审核
+     * @param param 更新对象
+     * @return RestResponse
+     */
+    @PostMapping("/storageReview")
+    @RequiredPermission(roles = "1,4")
+    public RestResponse storageReview(@Validated @RequestBody UsrOrderReview param) {
+        UsrOrderService.storageReview(param);
         return RestResponse.success();
     }
 

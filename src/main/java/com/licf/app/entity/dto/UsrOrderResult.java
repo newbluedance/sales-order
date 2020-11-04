@@ -1,7 +1,7 @@
 package com.licf.app.entity.dto;
 
 import com.common.base.BaseResult;
-import com.common.utils.RedisHelper;
+import com.licf.bgManage.enums.EOrderStatus;
 import lombok.Data;
 
 import java.math.BigDecimal;
