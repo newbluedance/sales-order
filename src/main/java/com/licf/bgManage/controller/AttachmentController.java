@@ -1,12 +1,14 @@
 package com.licf.bgManage.controller;
 
 import com.common.BusinessException;
+import com.common.authory.RequiredPermission;
 import com.common.constants.CodeConstant;
 import com.common.net.RestResponse;
 import com.common.utils.MessageUtils;
 import com.common.validation.group.Select;
 import com.licf.bgManage.entity.Attachment;
 import com.licf.bgManage.entity.dto.AttachmentParam;
+import com.licf.bgManage.enums.PermitEnum;
 import com.licf.bgManage.service.AttachmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
@@ -46,6 +48,7 @@ public class AttachmentController {
      * @author
      */
     @GetMapping("/attachment")
+    @RequiredPermission(permit = PermitEnum.CategoryQuery)
     public RestResponse<List<Attachment>> queryList(@Validated(Select.class) AttachmentParam param) {
         List<Attachment> attachmentList = attachmentService.getAttachmentList(param.getModuleName(), param.getModuleDataCode());
 
@@ -60,6 +63,7 @@ public class AttachmentController {
      * @return
      */
     @GetMapping("/img/**")
+    @RequiredPermission(permit = PermitEnum.CategoryQuery)
     public ResponseEntity<?> showImg(HttpServletRequest request) {
         String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
         String bestMatchPattern = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
@@ -81,6 +85,7 @@ public class AttachmentController {
      * @param param 其他参数
      */
     @PostMapping("/attachment")
+    @RequiredPermission(permit = PermitEnum.CategoryInsert)
     public RestResponse upload(@RequestParam MultipartFile file, @RequestParam HashMap<String, String> param) {
         try {
             AttachmentParam attachmentParam = new AttachmentParam();

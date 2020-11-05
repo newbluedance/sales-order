@@ -6,10 +6,13 @@ import com.common.constants.CodeConstant;
 import com.common.constants.SystemConstant;
 import com.common.utils.JwtUtils;
 import com.licf.bgManage.entity.BgEmployee;
+import com.licf.bgManage.entity.dto.BgEmployeeResult;
+import com.licf.bgManage.enums.PermitEnum;
 import com.licf.bgManage.service.BgEmployeeService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -21,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 拦截未登录的请求
+ *
  * @author lichunfeng
  */
 public class LoginInterceptor implements HandlerInterceptor {
@@ -38,17 +42,17 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         BgEmployee loginUser = JwtUtils.getLoginUserFromToken(tokenStr);
 
-        BgEmployee loginAdmin = (BgEmployee) redisTemplate.opsForValue().get(SystemConstant.LOGIN_USER_KEY_PREFIX.concat(loginUser.getAccount()));
-        if (loginAdmin != null) {
+        String redisKey = SystemConstant.LOGIN_USER_KEY_PREFIX.concat(loginUser.getAccount());
+        BgEmployeeResult employeeResult = (BgEmployeeResult) redisTemplate.opsForValue().get(redisKey);
+        if (employeeResult != null) {
             //redis失效时间60分钟
-            String redisKey = SystemConstant.LOGIN_USER_KEY_PREFIX.concat(loginAdmin.getAccount());
             redisTemplate.expire(redisKey, 3600000L,
                     TimeUnit.MILLISECONDS);
-            request.setAttribute("loginUser", loginAdmin);
+            request.setAttribute("loginUser", employeeResult);
 
             // 验证权限
-            if (!this.hasPermission(handler, loginAdmin)) {
-                throw new BusinessException(CodeConstant.NO_PERMIT, "你无法进行此操作!");
+            if (!this.hasPermission(handler, employeeResult)) {
+                throw new BusinessException(CodeConstant.NO_PERMIT, "你没有权限进行此操作!");
             }
 
             return true;
@@ -61,12 +65,19 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     /**
      * 是否有权限
+     *
      * @param handler
      * @return
      */
-    private boolean hasPermission(Object handler, BgEmployee loginAdmin) {
+    private boolean hasPermission(Object handler, BgEmployeeResult employeeResult) {
+
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
+            String name = handlerMethod.getBeanType().getName();
+            if (name.contains("BasicErrorController")) {
+                return true;
+            }
+
             // 获取方法上的注解
             RequiredPermission requiredPermission = handlerMethod.getMethod().getAnnotation(RequiredPermission.class);
             // 如果方法上的注解为空 则获取类的注解
@@ -74,20 +85,28 @@ public class LoginInterceptor implements HandlerInterceptor {
                 requiredPermission = handlerMethod.getMethod().getDeclaringClass().getAnnotation(RequiredPermission.class);
             }
             if (requiredPermission == null) {
-                return true;
+                return false;
             }
 
             String rolesStr = requiredPermission.roles();
+            // 如果角色有权限 直接返回true
             if (StringUtils.isNotBlank(rolesStr)) {
                 String[] permitRoles = rolesStr.split(",");
-                Integer[] roleIds = loginAdmin.getRoleIds();
-
+                Integer[] roleIds = employeeResult.getRoleIds();
                 for (Integer roleId : roleIds) {
                     if (ArrayUtils.contains(permitRoles, String.valueOf(roleId))) {
                         return true;
                     }
                 }
+            }
 
+            // 获取用户权限
+            PermitEnum permit = requiredPermission.permit();
+            PermitEnum[] permits = employeeResult.getPermits();
+            if (permit != null && ArrayUtils.isNotEmpty(permits)) {
+                if (ArrayUtils.contains(permits, permit)) {
+                    return true;
+                }
             }
         }
         return false;

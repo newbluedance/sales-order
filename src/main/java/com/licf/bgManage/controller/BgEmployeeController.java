@@ -1,19 +1,15 @@
 package com.licf.bgManage.controller;
 
-import com.common.BusinessException;
 import com.common.authory.RequiredPermission;
 import com.common.base.DivPageInfo;
-import com.common.constants.CodeConstant;
 import com.common.net.RestResponse;
-import com.common.utils.LoginUtils;
 import com.common.validation.group.Add;
 import com.common.validation.group.Update;
-import com.licf.bgManage.entity.BgEmployee;
 import com.licf.bgManage.entity.dto.BgEmployeeParam;
 import com.licf.bgManage.entity.dto.BgEmployeeResult;
+import com.licf.bgManage.enums.PermitEnum;
 import com.licf.bgManage.service.BgEmployeeService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -35,22 +31,25 @@ public class BgEmployeeController {
 
     /**
      * 根据条件获取分页list
+     *
      * @param param    持有查询条件
      * @param pageable 持有排序字段,和分页条件
      * @return RestResponse 持有分页对象
      */
     @GetMapping
+    @RequiredPermission(permit = PermitEnum.EmployeeQuery)
     public RestResponse<DivPageInfo<BgEmployeeResult>> page(BgEmployeeParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return RestResponse.success(bgEmployeeService.pageList(param, pageable));
     }
 
     /**
      * 新增
+     *
      * @param param 插入对象
      * @return RestResponse
      */
     @PostMapping
-    @RequiredPermission(roles = "1,2")
+    @RequiredPermission(permit = PermitEnum.EmployeeInsert)
     public RestResponse insert(@Validated(Add.class) @RequestBody BgEmployeeParam param) {
         bgEmployeeService.insert(param);
         return RestResponse.success();
@@ -58,11 +57,12 @@ public class BgEmployeeController {
 
     /**
      * 更新
+     *
      * @param param 更新对象
      * @return RestResponse
      */
     @PutMapping
-    @RequiredPermission(roles = "1,2")
+    @RequiredPermission(permit = PermitEnum.EmployeeUpdate)
     public RestResponse update(@Validated(Update.class) @RequestBody BgEmployeeParam param) {
         bgEmployeeService.update(param);
         return RestResponse.success();
@@ -70,11 +70,12 @@ public class BgEmployeeController {
 
     /**
      * 删除单个
+     *
      * @param id id
      * @return RestResponse
      */
     @DeleteMapping("/{id}")
-    @RequiredPermission(roles = "1,2")
+    @RequiredPermission(permit = PermitEnum.EmployeeDelete)
     public RestResponse deleteBgEmployee(@PathVariable int id) {
         bgEmployeeService.deleteById(id);
         return RestResponse.success();

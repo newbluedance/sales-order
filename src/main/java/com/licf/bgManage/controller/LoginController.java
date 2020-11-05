@@ -57,19 +57,21 @@ public class LoginController {
             return new RestResponse(CodeConstant.ERROR_LOGIN, "用户已被删除");
         }
 
+        String redisKey = SystemConstant.LOGIN_USER_KEY_PREFIX.concat(loginBgEmployee.getAccount());
         // 清除用户存储在缓存中的权限信息
-        redisTemplate.delete(SystemConstant.LOGIN_USER_KEY_PREFIX.concat(loginBgEmployee.getAccount()));
+        redisTemplate.delete(redisKey);
 
         //生成token
         String newToken = JwtUtils.sign(loginBgEmployee.getId(), loginBgEmployee.getAccount());
-        String redisKey = SystemConstant.LOGIN_USER_KEY_PREFIX.concat(loginBgEmployee.getAccount());
 
-        redisTemplate.opsForValue().set(redisKey, loginBgEmployee);
+        BgEmployeeResult adminResult = BgEmployeeConverter.INSTANCE.entityToResult(
+                loginBgEmployee);
+
+        redisTemplate.opsForValue().set(redisKey, adminResult);
         //redis失效时间60分钟
         redisTemplate.expire(redisKey, 3600000L,
                 TimeUnit.MILLISECONDS);
 
-        BgEmployeeResult adminResult = BgEmployeeConverter.INSTANCE.entityToResult(loginBgEmployee);
 
         adminResult.setToken(newToken);
 
@@ -80,7 +82,6 @@ public class LoginController {
     @PostMapping("/system/logout")
     @ResponseBody
     public RestResponse logout(HttpServletRequest request) {
-        String redisToken = null;
         // 从 request 中获取 Token 值
         String tokenStr = JwtUtils.getTokenFromRequest(request);
 

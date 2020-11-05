@@ -1,11 +1,13 @@
 package com.licf.bgManage.controller;
 
+import com.common.authory.RequiredPermission;
 import com.common.base.DivPageInfo;
 import com.common.net.RestResponse;
 import com.common.validation.group.Add;
 import com.common.validation.group.Update;
 import com.licf.bgManage.entity.dto.PubPayModeParam;
 import com.licf.bgManage.entity.dto.PubPayModeResult;
+import com.licf.bgManage.enums.PermitEnum;
 import com.licf.bgManage.service.PubPayModeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +35,8 @@ public class PubPayModeController {
      * @param pageable 持有排序字段,和分页条件
      * @return RestResponse 持有分页对象
      */
-    @GetMapping
+   @GetMapping
+    @RequiredPermission(permit = PermitEnum.PayModeQuery)
     public RestResponse<DivPageInfo<PubPayModeResult>> page(PubPayModeParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return RestResponse.success(pubPayModeService.pageList(param, pageable));
     }
@@ -44,6 +47,7 @@ public class PubPayModeController {
      * @return RestResponse
      */
     @PostMapping
+    @RequiredPermission(permit = PermitEnum.PayModeInsert)
     public RestResponse insert(@Validated(Add.class) @RequestBody PubPayModeParam param) {
         pubPayModeService.insert(param);
         return RestResponse.success();
@@ -55,6 +59,7 @@ public class PubPayModeController {
      * @return RestResponse
      */
     @PutMapping
+    @RequiredPermission(permit = PermitEnum.PayModeUpdate)
     public RestResponse update(@Validated(Update.class) @RequestBody PubPayModeParam param) {
         pubPayModeService.update(param);
         return RestResponse.success();
@@ -66,6 +71,7 @@ public class PubPayModeController {
      * @return RestResponse
      */
     @DeleteMapping("/{id}")
+    @RequiredPermission(permit = PermitEnum.PayModeDelete)
     public RestResponse deletePubPayMode(@PathVariable int id) {
         pubPayModeService.deleteById(id);
         return RestResponse.success();

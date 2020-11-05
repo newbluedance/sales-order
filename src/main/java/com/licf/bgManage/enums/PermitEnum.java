@@ -1,5 +1,7 @@
 package com.licf.bgManage.enums;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 /**
  * @description:
  * @author: licf
@@ -38,15 +40,19 @@ public enum PermitEnum {
     RoleInsert("角色", "新增"),
     RoleQuery("角色", "查询"),
     RoleUpdate("角色", "修改"),
-    CartSave("购物车","添加"),
-    CartQuery("购物车","查看"),
-    OrderAdd("订单","下订单"),
-    OrderQuerySelf("订单","查看自己的订单"),
-    OrderQuery("订单","查看所有订单"),
-    leaderReview("订单","审核"),
-    storageReview("订单","审核"),
-    OrderDeliver("订单","发货"),
-    OrderWriteOff("订单","财务核销");
+    CartSave("购物车", "添加"),
+    CartQuery("购物车", "查看"),
+    OrderAdd("订单", "下订单"),
+    OrderQuerySelf("订单", "查看自己的订单"),
+    OrderQuery("订单", "查看所有订单"),
+    leaderReview("订单", "主管审核"),
+    storageReview("订单", "审核员审核"),
+    OrderDeliver("订单", "发货"),
+    OrderWriteOff("订单", "财务核销"),
+    BannerDelete("横幅", "删除"),
+    BannerInsert("横幅", "新增"),
+    BannerQuery("横幅", "查询"),
+    BannerUpdate("横幅", "修改");
 
     private String module;
     private String permit;
@@ -63,4 +69,16 @@ public enum PermitEnum {
     public String getPermit() {
         return permit;
     }
+
+    public static PermitEnum[] asArray(Integer[] ordinals) {
+        if (ArrayUtils.isNotEmpty(ordinals)) {
+            PermitEnum[] permitEnums = new PermitEnum[ordinals.length];
+            for (int i = 0; i < ordinals.length; i++) {
+                permitEnums[i] = values()[i];
+            }
+            return permitEnums;
+        } else {
+            return new PermitEnum[0];
+        }
     }
+}

@@ -5,6 +5,7 @@ import com.licf.bgManage.entity.PubRole;
 import com.licf.bgManage.entity.dto.PubRoleParam;
 import com.licf.bgManage.entity.dto.PubRoleResult;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -14,5 +15,15 @@ import org.mapstruct.factory.Mappers;
  */
 @Mapper(componentModel = "spring")
 public interface PubRoleConverter extends BaseConverter<PubRole, PubRoleParam, PubRoleResult> {
+
 PubRoleConverter INSTANCE = Mappers.getMapper(PubRoleConverter.class);
+
+    /**
+     * 实体类转result
+     *
+     * @param entity
+     * @return dto
+     */
+    @Mapping(target = "permits", expression = "java(com.licf.bgManage.enums.PermitEnum.asArray(entity.getPermitIds()))")
+    PubRoleResult entityToResult(PubRole entity);
 }

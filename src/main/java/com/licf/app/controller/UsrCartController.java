@@ -1,10 +1,11 @@
 package com.licf.app.controller;
 
+import com.common.authory.RequiredPermission;
 import com.common.net.RestResponse;
 import com.licf.app.entity.dto.UsrCartParam;
 import com.licf.app.entity.dto.UsrCartResult;
 import com.licf.app.service.UsrCartService;
-import com.licf.bgManage.entity.BgGoods;
+import com.licf.bgManage.enums.PermitEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,19 +27,23 @@ public class UsrCartController {
 
     /**
      * 查看购物车
+     *
      * @return
      */
     @GetMapping("/query")
+    @RequiredPermission(permit = PermitEnum.CartQuery)
     public RestResponse<List<UsrCartResult>> query() {
         return RestResponse.success(usrCartService.query());
     }
 
     /**
      * 保存
+     *
      * @param param 更新对象 商品id 数量
      * @return RestResponse
      */
     @PostMapping("/save")
+    @RequiredPermission(permit = PermitEnum.CartSave)
     public RestResponse save(@RequestBody UsrCartParam param) {
         usrCartService.save(param);
         return RestResponse.success();

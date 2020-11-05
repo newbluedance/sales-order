@@ -1,8 +1,10 @@
 package com.licf.bgManage.controller;
 
+import com.common.authory.RequiredPermission;
 import com.common.base.DivPageInfo;
 import com.licf.bgManage.entity.dto.BgLogisticsParam;
 import com.licf.bgManage.entity.dto.BgLogisticsResult;
+import com.licf.bgManage.enums.PermitEnum;
 import com.licf.bgManage.service.BgLogisticsService;
 import com.common.net.RestResponse;
 import com.common.validation.group.Add;
@@ -33,7 +35,8 @@ public class BgLogisticsController {
      * @param pageable 持有排序字段,和分页条件
      * @return RestResponse 持有分页对象
      */
-    @GetMapping
+   @GetMapping
+    @RequiredPermission(permit = PermitEnum.LogisticsQuery)
     public RestResponse<DivPageInfo<BgLogisticsResult>> page(BgLogisticsParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return RestResponse.success(bgLogisticsService.pageList(param, pageable));
     }
@@ -44,6 +47,7 @@ public class BgLogisticsController {
      * @return RestResponse
      */
     @PostMapping
+    @RequiredPermission(permit = PermitEnum.LogisticsInsert)
     public RestResponse insert(@Validated(Add.class) @RequestBody BgLogisticsParam param) {
         bgLogisticsService.insert(param);
         return RestResponse.success();
@@ -55,6 +59,7 @@ public class BgLogisticsController {
      * @return RestResponse
      */
     @PutMapping
+    @RequiredPermission(permit = PermitEnum.LogisticsUpdate)
     public RestResponse update(@Validated(Update.class) @RequestBody BgLogisticsParam param) {
         bgLogisticsService.update(param);
         return RestResponse.success();
@@ -66,6 +71,7 @@ public class BgLogisticsController {
      * @return RestResponse
      */
     @DeleteMapping("/{id}")
+    @RequiredPermission(permit = PermitEnum.LogisticsDelete)
     public RestResponse deleteBgLogistics(@PathVariable int id) {
         bgLogisticsService.deleteById(id);
         return RestResponse.success();

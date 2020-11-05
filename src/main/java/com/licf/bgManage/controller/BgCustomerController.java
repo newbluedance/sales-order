@@ -1,11 +1,13 @@
 package com.licf.bgManage.controller;
 
+import com.common.authory.RequiredPermission;
 import com.common.base.DivPageInfo;
 import com.common.net.RestResponse;
 import com.common.validation.group.Add;
 import com.common.validation.group.Update;
 import com.licf.bgManage.entity.dto.BgCustomerParam;
 import com.licf.bgManage.entity.dto.BgCustomerResult;
+import com.licf.bgManage.enums.PermitEnum;
 import com.licf.bgManage.service.BgCustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -31,21 +33,25 @@ public class BgCustomerController {
     /**
      * 根据条件获取分页list
      * demo {{host28089}}/bgManage/bgCustomer?size=1&page=0&sort=id,asc
-     * @param param 持有查询条件
+     *
+     * @param param    持有查询条件
      * @param pageable 持有排序字段,和分页条件
      * @return RestResponse 持有分页对象
      */
     @GetMapping
+    @RequiredPermission(permit = PermitEnum.CustomerQuery)
     public RestResponse<DivPageInfo<BgCustomerResult>> page(BgCustomerParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return RestResponse.success(bgCustomerService.pageList(param, pageable));
     }
 
     /**
      * 新增
+     *
      * @param param 插入对象
      * @return RestResponse
      */
     @PostMapping
+    @RequiredPermission(permit = PermitEnum.CustomerInsert)
     public RestResponse insert(@Validated(Add.class) @RequestBody BgCustomerParam param) {
         bgCustomerService.insert(param);
         return RestResponse.success();
@@ -53,10 +59,12 @@ public class BgCustomerController {
 
     /**
      * 更新
+     *
      * @param param 更新对象
      * @return RestResponse
      */
     @PutMapping
+    @RequiredPermission(permit = PermitEnum.CustomerUpdate)
     public RestResponse update(@Validated(Update.class) @RequestBody BgCustomerParam param) {
         bgCustomerService.update(param);
         return RestResponse.success();
@@ -64,10 +72,12 @@ public class BgCustomerController {
 
     /**
      * 删除单个
+     *
      * @param id id
      * @return RestResponse
      */
     @DeleteMapping("/{id}")
+    @RequiredPermission(permit = PermitEnum.CustomerDelete)
     public RestResponse deleteBgCustomer(@PathVariable int id) {
         bgCustomerService.deleteById(id);
         return RestResponse.success();

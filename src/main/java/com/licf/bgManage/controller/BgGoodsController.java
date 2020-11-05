@@ -1,9 +1,11 @@
 package com.licf.bgManage.controller;
 
+import com.common.authory.RequiredPermission;
 import com.common.base.DivPageInfo;
 import com.common.utils.RedisHelper;
 import com.licf.bgManage.entity.dto.BgGoodsParam;
 import com.licf.bgManage.entity.dto.BgGoodsResult;
+import com.licf.bgManage.enums.PermitEnum;
 import com.licf.bgManage.service.BgGoodsService;
 import com.common.net.RestResponse;
 import com.common.validation.group.Add;
@@ -35,7 +37,8 @@ public class BgGoodsController {
      * @param pageable 持有排序字段,和分页条件
      * @return RestResponse 持有分页对象
      */
-    @GetMapping
+   @GetMapping
+    @RequiredPermission(permit = PermitEnum.GoodsQuery)
     public RestResponse<DivPageInfo<BgGoodsResult>> page(BgGoodsParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return RestResponse.success(bgGoodsService.pageList(param, pageable));
     }
@@ -46,6 +49,7 @@ public class BgGoodsController {
      * @return RestResponse
      */
     @PostMapping
+    @RequiredPermission(permit = PermitEnum.GoodsInsert)
     public RestResponse insert(@Validated(Add.class) @RequestBody BgGoodsParam param) {
         bgGoodsService.insert(param);
         return RestResponse.success();
@@ -57,6 +61,7 @@ public class BgGoodsController {
      * @return RestResponse
      */
     @PutMapping
+    @RequiredPermission(permit = PermitEnum.GoodsUpdate)
     public RestResponse update(@Validated(Update.class) @RequestBody BgGoodsParam param) {
         RedisHelper.clearGood(param.getId());
         bgGoodsService.update(param);
@@ -69,6 +74,7 @@ public class BgGoodsController {
      * @return RestResponse
      */
     @DeleteMapping("/{id}")
+    @RequiredPermission(permit = PermitEnum.GoodsDelete)
     public RestResponse deleteBgGoods(@PathVariable int id) {
         RedisHelper.clearGood(id);
         bgGoodsService.deleteById(id);

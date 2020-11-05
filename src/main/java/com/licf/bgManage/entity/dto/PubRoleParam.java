@@ -23,6 +23,8 @@ public class PubRoleParam extends BaseParam {
     @Length(max = 255, groups = {Update.class,Add.class}, message = "角色名称过长")
     private String roleName;
 
+    private Integer[] permitIds;
+
     /** 排序字段 */
     private Integer orderNum;
 }

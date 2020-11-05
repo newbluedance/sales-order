@@ -1,5 +1,7 @@
 package com.common.authory;
 
+import com.licf.bgManage.enums.PermitEnum;
+
 import java.lang.annotation.*;
 
 /**
@@ -16,5 +18,5 @@ public @interface RequiredPermission {
     //角色
     String roles() default "";
     //权限
-    String permits() default "";
+    PermitEnum permit();
 }

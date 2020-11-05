@@ -7,6 +7,7 @@ import com.common.utils.LoginUtils;
 import com.common.validation.group.Add;
 import com.licf.app.entity.dto.*;
 import com.licf.app.service.UsrOrderService;
+import com.licf.bgManage.enums.PermitEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,11 +31,13 @@ public class UsrOrderController {
 
     /**
      * 查看自己的订单
+     *
      * @param param    持有查询条件
      * @param pageable 持有排序字段,和分页条件
      * @return RestResponse 持有分页对象
      */
     @GetMapping("/querySelf")
+    @RequiredPermission(permit = PermitEnum.OrderQuerySelf)
     public RestResponse<DivPageInfo<UsrOrderResult>> querySelf(UsrOrderParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         param.setSalesman(LoginUtils.getLoginUser().getAccount());
         return RestResponse.success(UsrOrderService.pageList(param, pageable));
@@ -42,22 +45,25 @@ public class UsrOrderController {
 
     /**
      * 根据条件获取分页list
+     *
      * @param param    持有查询条件
      * @param pageable 持有排序字段,和分页条件
      * @return RestResponse 持有分页对象
      */
     @GetMapping
+    @RequiredPermission(permit = PermitEnum.OrderQuery)
     public RestResponse<DivPageInfo<UsrOrderResult>> page(UsrOrderParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return RestResponse.success(UsrOrderService.pageList(param, pageable));
     }
 
     /**
      * 下订单
+     *
      * @param param 插入对象
      * @return RestResponse
      */
     @PostMapping
-    @RequiredPermission(roles = "1,3")
+    @RequiredPermission(permit = PermitEnum.OrderAdd)
     public RestResponse add(@Validated(Add.class) @RequestBody UsrOrderParam param) {
         UsrOrderService.add(param);
         return RestResponse.success();
@@ -65,11 +71,12 @@ public class UsrOrderController {
 
     /**
      * 主管审核
+     *
      * @param param 更新对象
      * @return RestResponse
      */
     @PostMapping("/leaderReview")
-    @RequiredPermission(roles = "1,4")
+    @RequiredPermission(permit = PermitEnum.leaderReview)
     public RestResponse leaderReview(@Validated @RequestBody UsrOrderReview param) {
         UsrOrderService.leaderReview(param);
         return RestResponse.success();
@@ -77,11 +84,12 @@ public class UsrOrderController {
 
     /**
      * 审核员 审核
+     *
      * @param param 更新对象
      * @return RestResponse
      */
     @PostMapping("/storageReview")
-    @RequiredPermission(roles = "1,4")
+    @RequiredPermission(permit = PermitEnum.storageReview)
     public RestResponse storageReview(@Validated @RequestBody UsrOrderReview param) {
         UsrOrderService.storageReview(param);
         return RestResponse.success();
@@ -89,11 +97,12 @@ public class UsrOrderController {
 
     /**
      * 发货
+     *
      * @param param 更新对象
      * @return RestResponse
      */
     @PostMapping("/deliver")
-    @RequiredPermission(roles = "1,5")
+    @RequiredPermission(permit = PermitEnum.OrderDeliver)
     public RestResponse deliver(@Validated @RequestBody UsrOrderDeliver param) {
         UsrOrderService.deliver(param);
         return RestResponse.success();
@@ -101,11 +110,12 @@ public class UsrOrderController {
 
     /**
      * 核销
+     *
      * @param param 更新对象
      * @return RestResponse
      */
     @PostMapping("/writeOff")
-    @RequiredPermission(roles = "1,6")
+    @RequiredPermission(permit = PermitEnum.OrderWriteOff)
     public RestResponse writeOff(@Validated @RequestBody UsrOrderWriteOff param) {
         UsrOrderService.writeOff(param);
         return RestResponse.success();

@@ -1,5 +1,6 @@
 package com.licf.bgManage.controller;
 
+import com.common.authory.RequiredPermission;
 import com.common.base.DivPageInfo;
 import com.common.net.RestResponse;
 import com.common.utils.RedisHelper;
@@ -7,6 +8,7 @@ import com.common.validation.group.Add;
 import com.common.validation.group.Update;
 import com.licf.bgManage.entity.dto.BgBannerParam;
 import com.licf.bgManage.entity.dto.BgBannerResult;
+import com.licf.bgManage.enums.PermitEnum;
 import com.licf.bgManage.service.BgBannerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -32,21 +34,25 @@ public class BgBannerController {
     /**
      * 根据条件获取分页list
      * demo {{host28089}}/bgManage/bgBanner?size=1&page=0&sort=id,asc
-     * @param param 持有查询条件
+     *
+     * @param param    持有查询条件
      * @param pageable 持有排序字段,和分页条件
      * @return RestResponse 持有分页对象
      */
     @GetMapping
+    @RequiredPermission(permit = PermitEnum.BannerQuery)
     public RestResponse<DivPageInfo<BgBannerResult>> page(BgBannerParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return RestResponse.success(bgBannerService.pageList(param, pageable));
     }
 
     /**
      * 新增
+     *
      * @param param 插入对象
      * @return RestResponse
      */
     @PostMapping
+    @RequiredPermission(permit = PermitEnum.BannerInsert)
     public RestResponse insert(@Validated(Add.class) @RequestBody BgBannerParam param) {
         bgBannerService.insert(param);
         return RestResponse.success();
@@ -54,10 +60,12 @@ public class BgBannerController {
 
     /**
      * 更新
+     *
      * @param param 更新对象
      * @return RestResponse
      */
     @PutMapping
+    @RequiredPermission(permit = PermitEnum.BannerUpdate)
     public RestResponse update(@Validated(Update.class) @RequestBody BgBannerParam param) {
         bgBannerService.update(param);
         return RestResponse.success();
@@ -65,10 +73,12 @@ public class BgBannerController {
 
     /**
      * 删除单个
+     *
      * @param id id
      * @return RestResponse
      */
     @DeleteMapping("/{id}")
+    @RequiredPermission(permit = PermitEnum.BannerDelete)
     public RestResponse deleteBgBanner(@PathVariable int id) {
         bgBannerService.deleteById(id);
         RedisHelper.clearBanner(id);

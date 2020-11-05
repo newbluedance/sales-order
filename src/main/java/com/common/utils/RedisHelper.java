@@ -4,9 +4,11 @@ import com.common.constants.SystemConstant;
 import com.licf.bgManage.entity.BgBanner;
 import com.licf.bgManage.entity.BgDepartment;
 import com.licf.bgManage.entity.BgGoods;
+import com.licf.bgManage.entity.PubRole;
 import com.licf.bgManage.mapper.BgBannerMapper;
 import com.licf.bgManage.mapper.BgDepartmentMapper;
 import com.licf.bgManage.mapper.BgGoodsMapper;
+import com.licf.bgManage.mapper.PubRoleMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.concurrent.TimeUnit;
@@ -24,6 +26,8 @@ public class RedisHelper {
     private static BgDepartmentMapper deptMapper = SpringContextUtil.getBean(BgDepartmentMapper.class);
 
     private static BgBannerMapper bgBannerMapper = SpringContextUtil.getBean(BgBannerMapper.class);
+
+    private static PubRoleMapper roleMapper = SpringContextUtil.getBean(PubRoleMapper.class);
 
     public static BgGoods getGood(Integer id) {
         BgGoods goods = (BgGoods) redisTemplate.opsForValue().get(SystemConstant.GOOD_KEY_PREFIX.concat(String.valueOf(id)));
@@ -59,6 +63,18 @@ public class RedisHelper {
                     TimeUnit.MILLISECONDS);
         }
         return banner;
+    }
+
+    public static PubRole getRole(Integer id) {
+        PubRole pubRole = (PubRole) redisTemplate.opsForValue().get(SystemConstant.ROLE_KEY_PREFIX.concat(String.valueOf(id)));
+        if (pubRole == null) {
+            pubRole = roleMapper.selectByPrimaryKey(id);
+            redisTemplate.opsForValue().set(SystemConstant.ROLE_KEY_PREFIX.concat(String.valueOf(id)), pubRole);
+            //redis失效时间24小时
+            redisTemplate.expire(SystemConstant.ROLE_KEY_PREFIX.concat(String.valueOf(id)), 3600000L*24,
+                    TimeUnit.MILLISECONDS);
+        }
+        return pubRole;
     }
 
     public static void clearGood(Integer id) {

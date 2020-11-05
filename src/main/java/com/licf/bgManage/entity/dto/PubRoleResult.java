@@ -1,6 +1,7 @@
 package com.licf.bgManage.entity.dto;
 
 import com.common.base.BaseResult;
+import com.licf.bgManage.enums.PermitEnum;
 import lombok.Data;
 
 /**
@@ -18,6 +19,8 @@ public class PubRoleResult extends BaseResult {
 
     /** 角色名称 */
     private String roleName;
+
+    private PermitEnum[] permits;
 
     /** 排序字段 */
     private Integer orderNum;
