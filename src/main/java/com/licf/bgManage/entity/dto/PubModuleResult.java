@@ -1,8 +1,9 @@
 package com.licf.bgManage.entity.dto;
 
 import com.common.base.BaseResult;
-import java.time.LocalDateTime;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 
@@ -29,15 +30,8 @@ public class PubModuleResult extends BaseResult {
     /**  */
     private Integer parentId;
 
-    /** 创建时间 */
-    private LocalDateTime createTime;
+    private List<PubModuleResult> children;
 
-    /** 创建人 */
-    private String createdBy;
 
-    /** 更新时间 */
-    private LocalDateTime updateTime;
 
-    /** 更新人 */
-    private String updatedBy;
 }

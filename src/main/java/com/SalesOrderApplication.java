@@ -1,5 +1,6 @@
 package com;
 
+import com.common.utils.RedisHelper;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -19,6 +20,8 @@ public class SalesOrderApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SalesOrderApplication.class, args);
+        //清空redis
+        RedisHelper.fluShall();
     }
 
     /**

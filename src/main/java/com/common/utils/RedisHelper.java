@@ -1,16 +1,11 @@
 package com.common.utils;
 
 import com.common.constants.SystemConstant;
-import com.licf.bgManage.entity.BgBanner;
-import com.licf.bgManage.entity.BgDepartment;
-import com.licf.bgManage.entity.BgGoods;
-import com.licf.bgManage.entity.PubRole;
-import com.licf.bgManage.mapper.BgBannerMapper;
-import com.licf.bgManage.mapper.BgDepartmentMapper;
-import com.licf.bgManage.mapper.BgGoodsMapper;
-import com.licf.bgManage.mapper.PubRoleMapper;
+import com.licf.bgManage.entity.*;
+import com.licf.bgManage.mapper.*;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -28,6 +23,8 @@ public class RedisHelper {
     private static BgBannerMapper bgBannerMapper = SpringContextUtil.getBean(BgBannerMapper.class);
 
     private static PubRoleMapper roleMapper = SpringContextUtil.getBean(PubRoleMapper.class);
+
+    private static PubModuleMapper moduleMapper = SpringContextUtil.getBean(PubModuleMapper.class);
 
     public static BgGoods getGood(Integer id) {
         BgGoods goods = (BgGoods) redisTemplate.opsForValue().get(SystemConstant.GOOD_KEY_PREFIX.concat(String.valueOf(id)));
@@ -76,6 +73,17 @@ public class RedisHelper {
         }
         return pubRole;
     }
+    public static PubModule getModule(Integer id) {
+        PubModule pubModule = (PubModule) redisTemplate.opsForValue().get(SystemConstant.MODULE_KEY_PREFIX.concat(String.valueOf(id)));
+        if (pubModule == null) {
+            pubModule = moduleMapper.selectByPrimaryKey(id);
+            redisTemplate.opsForValue().set(SystemConstant.MODULE_KEY_PREFIX.concat(String.valueOf(id)), pubModule);
+            //redis失效时间24小时
+            redisTemplate.expire(SystemConstant.MODULE_KEY_PREFIX.concat(String.valueOf(id)), 3600000L*24,
+                    TimeUnit.MILLISECONDS);
+        }
+        return pubModule;
+    }
 
     public static void clearGood(Integer id) {
         redisTemplate.delete(SystemConstant.GOOD_KEY_PREFIX.concat(String.valueOf(id)));
@@ -86,5 +94,14 @@ public class RedisHelper {
     }
     public static void clearBanner(Integer id) {
         redisTemplate.delete(SystemConstant.BANNER_KEY_PREFIX.concat(String.valueOf(id)));
+    }
+
+    /**
+     * 清空redis
+     */
+    public static void fluShall(){
+        Set<String> keys = redisTemplate.keys(SystemConstant.ROLE_KEY_PREFIX+"*");
+        keys.addAll(redisTemplate.keys(SystemConstant.MODULE_KEY_PREFIX+"*"));
+        redisTemplate.delete(keys);
     }
 }

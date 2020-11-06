@@ -30,6 +30,9 @@ public class PubRole extends BaseEntity {
     @Column
     private Integer[] permitIds;
 
+    @Column
+    private Integer[] moduleIds;
+
     /** 排序字段 */
     @Column
     private Integer orderNum;
