@@ -6,6 +6,7 @@ import com.licf.bgManage.entity.BgDepartment;
 import com.licf.bgManage.entity.PubRole;
 import com.licf.bgManage.enums.PermitEnum;
 import com.licf.bgManage.mapperstruct.PubModuleConverter;
+import com.licf.common.service.BasicService;
 import lombok.Data;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -105,21 +106,13 @@ public class BgEmployeeResult extends BaseResult {
                 List<PubModuleResult> moduleResults = moduleIdSet.stream().map(t -> RedisHelper.getModule(t)).map(t -> PubModuleConverter.INSTANCE.entityToResult(t)).collect(Collectors.toList());
                 List<PubModuleResult> roots = moduleResults.stream().filter(t -> t.getParentId() == 0).collect(Collectors.toList());
                 Map<Integer, List<PubModuleResult>> childMap = moduleResults.stream().filter(t -> t.getParentId() != 0).collect(Collectors.groupingBy(t -> t.getParentId()));
-                initChildren(roots, childMap);
+                BasicService.initChildren(roots, childMap);
                 return roots;
             }
         }
         return new ArrayList<>(0);
     }
 
-    private void initChildren(List<PubModuleResult> roots,Map<Integer, List<PubModuleResult>> childMap){
-        for (PubModuleResult root : roots) {
-            List<PubModuleResult> children = childMap.get(root.getId());
-            if (children != null) {
-                root.setChildren(children);
-                initChildren(children,childMap);
-            }
-        }
-    }
+
 
 }

@@ -52,7 +52,9 @@ public enum PermitEnum {
     BannerDelete("横幅", "删除"),
     BannerInsert("横幅", "新增"),
     BannerQuery("横幅", "查询"),
-    BannerUpdate("横幅", "修改");
+    BannerUpdate("横幅", "修改"),
+    ListModule("配置查询", "模块"),
+    ListPermit("配置查询", "权限");
 
     private String module;
     private String permit;

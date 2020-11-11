@@ -102,6 +102,9 @@ public class RedisHelper {
     public static void fluShall(){
         Set<String> keys = redisTemplate.keys(SystemConstant.ROLE_KEY_PREFIX+"*");
         keys.addAll(redisTemplate.keys(SystemConstant.MODULE_KEY_PREFIX+"*"));
+        keys.addAll(redisTemplate.keys(SystemConstant.MODULE_KEY_PREFIX+"**"));
         redisTemplate.delete(keys);
     }
+
+
 }

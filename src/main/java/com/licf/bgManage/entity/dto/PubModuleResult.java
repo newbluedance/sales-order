@@ -32,6 +32,4 @@ public class PubModuleResult extends BaseResult {
 
     private List<PubModuleResult> children;
 
-
-
 }
