@@ -114,9 +114,28 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
         UsrOrder usrOrder = new UsrOrder();
         usrOrder.setId(param.getId());
         if (param.isPass()) {
-            usrOrder.setStatus(EOrderStatus.PENDING_DELIVER);
+            usrOrder.setStatus(EOrderStatus.PENDING_DELIVER_REVIEW);
         } else {
             usrOrder.setStatus(EOrderStatus.STORAGE_REVIEW_REJECT);
+            usrOrder.setReason(param.getReason());
+        }
+        mapper.updateByPrimaryKeySelective(usrOrder);
+        return true;
+    }
+
+    @Override
+    public boolean deliverReview(UsrOrderReview param) {
+        UsrOrder curOrder = mapper.selectByPrimaryKey(param.getId());
+        if (EOrderStatus.PENDING_DELIVER_REVIEW != curOrder.getStatus()) {
+            throw new BusinessException(CodeConstant.UNDIFINE, "订单已不是待审核状态!");
+        }
+
+        UsrOrder usrOrder = new UsrOrder();
+        usrOrder.setId(param.getId());
+        if (param.isPass()) {
+            usrOrder.setStatus(EOrderStatus.PENDING_DELIVER);
+        } else {
+            usrOrder.setStatus(EOrderStatus.DELIVER_REVIEW_REJECT);
             usrOrder.setReason(param.getReason());
         }
         mapper.updateByPrimaryKeySelective(usrOrder);

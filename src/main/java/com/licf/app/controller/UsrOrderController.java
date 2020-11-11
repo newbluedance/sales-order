@@ -96,6 +96,19 @@ public class UsrOrderController {
     }
 
     /**
+     * 发货员 审核
+     *
+     * @param param 更新对象
+     * @return RestResponse
+     */
+    @PostMapping("/deliverReview")
+    @RequiredPermission(permit = PermitEnum.deliverReview)
+    public RestResponse deliverReview(@Validated @RequestBody UsrOrderReview param) {
+        UsrOrderService.deliverReview(param);
+        return RestResponse.success();
+    }
+
+    /**
      * 发货
      *
      * @param param 更新对象

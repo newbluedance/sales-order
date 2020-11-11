@@ -15,6 +15,8 @@ public interface UsrOrderService extends BaseService<UsrOrderParam, UsrOrderResu
 
     boolean storageReview(UsrOrderReview param);
 
+    boolean deliverReview(UsrOrderReview param);
+
     boolean deliver(UsrOrderDeliver param);
 
     boolean writeOff(UsrOrderWriteOff param);
