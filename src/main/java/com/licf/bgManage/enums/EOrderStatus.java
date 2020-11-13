@@ -18,16 +18,42 @@ public enum EOrderStatus {
     PENDING_WRITE_OFF,
     //已核销
     WRITE_OFF,
-    //审核拒绝
+    //主管审核拒绝
     LEADER_REVIEW_REJECT,
-    //审核拒绝
+    //仓库审核拒绝
     STORAGE_REVIEW_REJECT,
-    //审核拒绝
+    //发货员审核拒绝
     DELIVER_REVIEW_REJECT,
     //发货拒绝
     DELIVER_REJECT,
     //核销坏账
     WRITE_BAD_DEBTS,
     //退货完成
-    RETURN_GOODS,
+    RETURN_GOODS;
+
+    public EOrderStatus next() {
+        if (this.ordinal() < WRITE_OFF.ordinal()) {
+            return EOrderStatus.values()[this.ordinal() + 1];
+        } else {
+            return null;
+        }
+
+    }
+
+    public EOrderStatus reject() {
+        if (this == PENDING_LEADER_REVIEW) {
+            return LEADER_REVIEW_REJECT;
+        } else if (this == PENDING_STORAGE_REVIEW) {
+            return STORAGE_REVIEW_REJECT;
+        } else if (this == PENDING_DELIVER_REVIEW) {
+            return DELIVER_REVIEW_REJECT;
+        } else if (this == PENDING_DELIVER) {
+            return DELIVER_REJECT;
+        } else if (this == PENDING_WRITE_OFF) {
+            return WRITE_BAD_DEBTS;
+        }
+        return null;
+
+    }
+
 }

@@ -2,6 +2,7 @@ package com.licf.app.service;
 
 import com.common.base.BaseService;
 import com.licf.app.entity.dto.*;
+import com.licf.bgManage.enums.EOrderStatus;
 
 /**
  * @author lichunfeng
@@ -11,11 +12,7 @@ public interface UsrOrderService extends BaseService<UsrOrderParam, UsrOrderResu
 
     boolean add(UsrOrderParam param);
 
-    boolean leaderReview(UsrOrderReview param);
-
-    boolean storageReview(UsrOrderReview param);
-
-    boolean deliverReview(UsrOrderReview param);
+    boolean review(UsrOrderReview param, EOrderStatus curStatus);
 
     boolean deliver(UsrOrderDeliver param);
 

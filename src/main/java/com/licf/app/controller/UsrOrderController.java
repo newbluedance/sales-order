@@ -7,6 +7,7 @@ import com.common.utils.LoginUtils;
 import com.common.validation.group.Add;
 import com.licf.app.entity.dto.*;
 import com.licf.app.service.UsrOrderService;
+import com.licf.bgManage.enums.EOrderStatus;
 import com.licf.bgManage.enums.PermitEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -78,7 +79,7 @@ public class UsrOrderController {
     @PostMapping("/leaderReview")
     @RequiredPermission(permit = PermitEnum.leaderReview)
     public RestResponse leaderReview(@Validated @RequestBody UsrOrderReview param) {
-        UsrOrderService.leaderReview(param);
+        UsrOrderService.review(param, EOrderStatus.PENDING_LEADER_REVIEW);
         return RestResponse.success();
     }
 
@@ -91,7 +92,7 @@ public class UsrOrderController {
     @PostMapping("/storageReview")
     @RequiredPermission(permit = PermitEnum.storageReview)
     public RestResponse storageReview(@Validated @RequestBody UsrOrderReview param) {
-        UsrOrderService.storageReview(param);
+        UsrOrderService.review(param, EOrderStatus.PENDING_STORAGE_REVIEW);
         return RestResponse.success();
     }
 
@@ -104,7 +105,7 @@ public class UsrOrderController {
     @PostMapping("/deliverReview")
     @RequiredPermission(permit = PermitEnum.deliverReview)
     public RestResponse deliverReview(@Validated @RequestBody UsrOrderReview param) {
-        UsrOrderService.deliverReview(param);
+        UsrOrderService.review(param, EOrderStatus.PENDING_DELIVER_REVIEW);
         return RestResponse.success();
     }
 

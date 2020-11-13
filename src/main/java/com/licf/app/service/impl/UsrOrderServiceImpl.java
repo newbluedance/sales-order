@@ -1,5 +1,6 @@
 package com.licf.app.service.impl;
 
+import ch.qos.logback.core.db.dialect.DBUtil;
 import com.alibaba.fastjson.JSON;
 import com.common.BusinessException;
 import com.common.base.BaseServiceImpl;
@@ -86,76 +87,40 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
     }
 
     @Override
-    public boolean leaderReview(UsrOrderReview param) {
+    public boolean review(UsrOrderReview param, EOrderStatus curStatus) {
         UsrOrder curOrder = mapper.selectByPrimaryKey(param.getId());
-        if (EOrderStatus.PENDING_LEADER_REVIEW != curOrder.getStatus()) {
+        if (curStatus != curOrder.getStatus()) {
             throw new BusinessException(CodeConstant.UNDIFINE, "订单已不是待审核状态!");
         }
 
         UsrOrder usrOrder = new UsrOrder();
         usrOrder.setId(param.getId());
         if (param.isPass()) {
-            usrOrder.setStatus(EOrderStatus.PENDING_STORAGE_REVIEW);
+            usrOrder.setStatus(curStatus.next());
         } else {
-            usrOrder.setStatus(EOrderStatus.LEADER_REVIEW_REJECT);
+            usrOrder.setStatus(curStatus.reject());
             usrOrder.setReason(param.getReason());
         }
         mapper.updateByPrimaryKeySelective(usrOrder);
         return true;
-    }
 
-    @Override
-    public boolean storageReview(UsrOrderReview param) {
-        UsrOrder curOrder = mapper.selectByPrimaryKey(param.getId());
-        if (EOrderStatus.PENDING_STORAGE_REVIEW != curOrder.getStatus()) {
-            throw new BusinessException(CodeConstant.UNDIFINE, "订单已不是待审核状态!");
-        }
-
-        UsrOrder usrOrder = new UsrOrder();
-        usrOrder.setId(param.getId());
-        if (param.isPass()) {
-            usrOrder.setStatus(EOrderStatus.PENDING_DELIVER_REVIEW);
-        } else {
-            usrOrder.setStatus(EOrderStatus.STORAGE_REVIEW_REJECT);
-            usrOrder.setReason(param.getReason());
-        }
-        mapper.updateByPrimaryKeySelective(usrOrder);
-        return true;
-    }
-
-    @Override
-    public boolean deliverReview(UsrOrderReview param) {
-        UsrOrder curOrder = mapper.selectByPrimaryKey(param.getId());
-        if (EOrderStatus.PENDING_DELIVER_REVIEW != curOrder.getStatus()) {
-            throw new BusinessException(CodeConstant.UNDIFINE, "订单已不是待审核状态!");
-        }
-
-        UsrOrder usrOrder = new UsrOrder();
-        usrOrder.setId(param.getId());
-        if (param.isPass()) {
-            usrOrder.setStatus(EOrderStatus.PENDING_DELIVER);
-        } else {
-            usrOrder.setStatus(EOrderStatus.DELIVER_REVIEW_REJECT);
-            usrOrder.setReason(param.getReason());
-        }
-        mapper.updateByPrimaryKeySelective(usrOrder);
-        return true;
     }
 
     @Override
     public boolean deliver(UsrOrderDeliver param) {
         UsrOrder curOrder = mapper.selectByPrimaryKey(param.getId());
-        if (EOrderStatus.PENDING_DELIVER != curOrder.getStatus()) {
+        EOrderStatus curStatus = curOrder.getStatus();
+        if (EOrderStatus.PENDING_DELIVER != curStatus) {
             throw new BusinessException(CodeConstant.UNDIFINE, "订单已不是待发货状态!");
         }
 
         UsrOrder usrOrder = new UsrOrder();
         usrOrder.setId(param.getId());
         if (param.isReject()) {
-            usrOrder.setStatus(EOrderStatus.DELIVER_REJECT);
+            usrOrder.setStatus(curStatus.reject());
             usrOrder.setReason(param.getReason());
         } else {
-            usrOrder.setStatus(EOrderStatus.PENDING_WRITE_OFF);
+            usrOrder.setStatus(curStatus.next());
             usrOrder.setLogisticsName(param.getLogisticsName());
             if (param.getLogisticsNo() != null) {
                 usrOrder.setLogisticsNo(param.getLogisticsNo());
@@ -216,7 +181,6 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
             throw new BusinessException(CodeConstant.UNDIFINE, "你无法进行此操作!");
         }
 
-
         UsrOrder usrOrder = new UsrOrder();
         usrOrder.setId(param.getId());
         usrOrder.setStatus(param.getStatus());
@@ -250,9 +214,47 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
         return pageConverter(pageInfo);
     }
 
-    public DbOrderResp addDbOrder(DbOrderReq common) {
+    public static void main(String[] args) {
+        //从物流公司获取单号及其他物流信息
+        DbOrderReq dbOrderReq = new DbOrderReq();
+        dbOrderReq.setLogisticID("");
+        dbOrderReq.setCompanyCode("");
+        dbOrderReq.setOrderType("");
+        dbOrderReq.setTransportType("");
+        dbOrderReq.setCustomerCode("");
+        dbOrderReq.setGmtCommit("");
+        dbOrderReq.setPayType("");
+        DbSender dbSender = new DbSender();
+        dbSender.setName("光华生物");
+        dbSender.setMobile("18168388455");
+        dbSender.setProvince("河南省");
+        dbSender.setCity("郑州市");
+        dbSender.setCounty("新郑区");
+        dbSender.setAddress("花园路111号");
+
+        DbReceiver dbReceiver = new DbReceiver();
+        dbReceiver.setName("李春风");
+        dbReceiver.setMobile("13401908428");
+        dbReceiver.setProvince("江苏省");
+        dbReceiver.setCity("南京市");
+        dbReceiver.setCounty("雨花台区");
+        dbReceiver.setAddress("雨花台软件大道108号");
+        DbPackageInfo dbPackageInfo = new DbPackageInfo();
+        dbPackageInfo.setCargoName("");
+        dbPackageInfo.setTotalNumber("");
+        dbPackageInfo.setTotalWeight("");
+        dbPackageInfo.setDeliveryType("");
+        DbOrderResp dbOrderResp = addDbOrder(dbOrderReq);
+        System.out.println(dbOrderReq);
+
+    }
+
+
+    public static DbOrderResp addDbOrder(DbOrderReq common) {
         //订单内容 json字符串，SDK提供FastJsonUtil转Json
         String params = FastJsonUtil.toJSONString(common);
+        //请求url
+        String url = "this is request address";
         //companyCode与appkey为双方约定
         String companyCode = "this is companyCode";
         String appkey = "this is appkey";
@@ -266,8 +268,6 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
         data[1] = new NameValuePair("digest", digest);
         data[2] = new NameValuePair("timestamp", timestamp);
         data[3] = new NameValuePair("params", params);
-        //请求url
-        String url = "this is request address";
         ResultDO<String> response = null;
         //返回结果
         response = HttpUtils.sendRequest(url, data, "UTF-8", 5000);
