@@ -1,5 +1,6 @@
 package com.licf.bgManage.entity.dto;
 
+import com.common.authory.SCondition;
 import com.common.base.BaseParam;
 import com.common.validation.group.Add;
 import com.common.validation.group.Update;
@@ -22,6 +23,7 @@ public class BgCustomerParam extends BaseParam {
 
     /** 客户名称 */
     @Length(max = 255, groups = {Update.class,Add.class}, message = "客户名称过长")
+    @SCondition("like")
     private String customerName;
 
     /** 手机号 */

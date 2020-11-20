@@ -11,6 +11,7 @@ import com.licf.app.mapper.UsrCartMapper;
 import com.licf.app.mapperstruct.UsrCartConverter;
 import com.licf.app.service.UsrCartService;
 import com.licf.bgManage.entity.BgEmployee;
+import com.licf.bgManage.entity.dto.BgEmployeeResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class UsrCartServiceImpl extends BaseServiceImpl<UsrCart, UsrCartParam, U
 
     @Override
     public List<UsrCartResult> query() {
-        BgEmployee loginUser = LoginUtils.getLoginUser();
+        BgEmployeeResult loginUser = LoginUtils.getLoginUser();
         UsrCart cart = mapper.selectByPrimaryKey(loginUser.getId());
         if (cart != null && StringUtils.isNotBlank(cart.getGoods())) {
             List<UsrCartParam> usrCartParamList = JSON.parseArray(cart.getGoods(), UsrCartParam.class);
@@ -43,7 +44,7 @@ public class UsrCartServiceImpl extends BaseServiceImpl<UsrCart, UsrCartParam, U
 
     @Override
     public boolean save(UsrCartParam param) {
-        BgEmployee loginUser = LoginUtils.getLoginUser();
+        BgEmployeeResult loginUser = LoginUtils.getLoginUser();
         UsrCart cart = mapper.selectByPrimaryKey(loginUser.getId());
         if (cart == null) {
             cart = new UsrCart();

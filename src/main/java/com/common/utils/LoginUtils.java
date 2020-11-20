@@ -1,6 +1,7 @@
 package com.common.utils;
 
 import com.licf.bgManage.entity.BgEmployee;
+import com.licf.bgManage.entity.dto.BgEmployeeResult;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -15,10 +16,10 @@ public class LoginUtils {
      *
      * @return
      */
-    public static BgEmployee getLoginUser() {
+    public static BgEmployeeResult getLoginUser() {
         try {
             ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            return (BgEmployee) servletRequestAttributes.getRequest().getAttribute("loginUser");
+            return (BgEmployeeResult) servletRequestAttributes.getRequest().getAttribute("loginUser");
         } catch (Exception e) {
             e.printStackTrace();
         }

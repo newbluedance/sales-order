@@ -24,6 +24,7 @@ import com.licf.app.mapperstruct.UsrOrderConverter;
 import com.licf.app.service.UsrOrderService;
 import com.licf.bgManage.entity.BgEmployee;
 import com.licf.bgManage.entity.BgGoods;
+import com.licf.bgManage.entity.dto.BgEmployeeResult;
 import com.licf.bgManage.enums.EOrderStatus;
 import com.licf.bgManage.mapperstruct.BgGoodsConverter;
 import org.apache.commons.httpclient.NameValuePair;
@@ -49,7 +50,7 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
 
     @Override
     public boolean add(UsrOrderParam param) {
-        BgEmployee loginUser = LoginUtils.getLoginUser();
+        BgEmployeeResult loginUser = LoginUtils.getLoginUser();
 
         List<UsrCartParam> goods = param.getGoods();
         //购物车移除

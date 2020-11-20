@@ -1,10 +1,12 @@
 package com.common.base;
 
+import com.common.authory.SCondition;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.data.domain.Pageable;
 import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.util.MetaObjectUtil;
 
 import java.util.List;
 
@@ -14,14 +16,14 @@ import java.util.List;
  */
 public abstract class BaseServiceImpl<E extends BaseEntity, P extends BaseParam, R extends BaseResult> implements BaseService<P, R> {
 
-//    @Autowired
+    //    @Autowired
     protected BaseMapper<E> mapper;
 
-//    @Autowired
+    //    @Autowired
     protected BaseConverter<E, P, R> converter;
 
-    public void initMapperConverter(BaseMapper<E> mapper,BaseConverter<E, P, R> converter) {
-        this.mapper=mapper;
+    public void initMapperConverter(BaseMapper<E> mapper, BaseConverter<E, P, R> converter) {
+        this.mapper = mapper;
         this.converter = converter;
     }
 
@@ -34,7 +36,34 @@ public abstract class BaseServiceImpl<E extends BaseEntity, P extends BaseParam,
     public DivPageInfo<R> pageList(P param, Pageable pageable) {
         E e = converter.paramToEntity(param);
         Example example = new Example(e.getClass());
-        example.createCriteria().andEqualTo(param);
+//        example.createCriteria().andEqualTo(param);
+
+        Example.Criteria criteria = example.createCriteria();
+        if (param != null) {
+            MetaObject metaObject = MetaObjectUtil.forObject(param);
+            String[] properties = metaObject.getGetterNames();
+            for (String property : properties) {
+                Object value = metaObject.getValue(property);
+                //属性值不为空
+                if (value != null) {
+                SCondition sCondition = null;
+                try {
+                    sCondition = param.getClass().getDeclaredField(property).getAnnotation(SCondition.class); //在获取注解
+                } catch (NoSuchFieldException noSuchFieldException) {
+                    noSuchFieldException.printStackTrace();
+                }
+
+                    if (sCondition != null && "like".equals(sCondition.value())) {
+                        criteria.andLike(property, "%"+value+"%");
+                    } else {
+                        criteria.andEqualTo(property, value);
+                    }
+
+                }
+            }
+        }
+
+
         example.setOrderByClause(formatSortString(pageable));
         /// ...doSelectPageInfo(() -> converter.entityToResult(mapper.selectByExample(example)));
         //上面这种写法不能真正转换类型,
