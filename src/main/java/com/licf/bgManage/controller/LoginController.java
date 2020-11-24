@@ -5,6 +5,7 @@ import com.common.constants.SystemConstant;
 import com.common.constants.YesNoConstant;
 import com.common.net.RestResponse;
 import com.common.utils.JwtUtils;
+import com.common.utils.RedisHelper;
 import com.licf.bgManage.entity.BgEmployee;
 import com.licf.bgManage.entity.dto.BgEmployeeResult;
 import com.licf.bgManage.entity.dto.LoginToken;
@@ -60,6 +61,7 @@ public class LoginController {
         String redisKey = SystemConstant.LOGIN_USER_KEY_PREFIX.concat(loginBgEmployee.getAccount());
         // 清除用户存储在缓存中的权限信息
         redisTemplate.delete(redisKey);
+        RedisHelper.clearRole(loginBgEmployee.getRoleIds());
 
         //生成token
         String newToken = JwtUtils.sign(loginBgEmployee.getId(), loginBgEmployee.getAccount());

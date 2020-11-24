@@ -16,4 +16,6 @@ public interface BgEmployeeService extends BaseService<BgEmployeeParam, BgEmploy
      * @param userName
      */
     void clearRedisAuthenticationInfo(String userName);
+
+    void updateSelf(BgEmployeeParam param);
 }

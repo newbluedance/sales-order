@@ -1,5 +1,6 @@
 package com.licf.bgManage.entity.dto;
 
+import com.common.authory.SCondition;
 import com.common.base.BaseParam;
 import com.common.validation.group.Add;
 import com.common.validation.group.Update;
@@ -24,6 +25,7 @@ public class BgEmployeeParam extends BaseParam {
 
     /** 姓名 */
     @Length(max = 255, groups = {Update.class,Add.class}, message = "姓名过长")
+    @SCondition("like")
     private String employeeName;
 
     /** 手机号 */

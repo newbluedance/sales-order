@@ -67,6 +67,7 @@ public class BgBannerController {
     @PutMapping
     @RequiredPermission(permit = PermitEnum.BannerUpdate)
     public RestResponse update(@Validated(Update.class) @RequestBody BgBannerParam param) {
+        RedisHelper.clearBanner(param.getId());
         bgBannerService.update(param);
         return RestResponse.success();
     }

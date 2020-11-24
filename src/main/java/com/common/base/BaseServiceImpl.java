@@ -3,6 +3,7 @@ package com.common.base;
 import com.common.authory.SCondition;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.data.domain.Pageable;
 import tk.mybatis.mapper.entity.Example;
@@ -36,7 +37,6 @@ public abstract class BaseServiceImpl<E extends BaseEntity, P extends BaseParam,
     public DivPageInfo<R> pageList(P param, Pageable pageable) {
         E e = converter.paramToEntity(param);
         Example example = new Example(e.getClass());
-//        example.createCriteria().andEqualTo(param);
 
         Example.Criteria criteria = example.createCriteria();
         if (param != null) {
@@ -45,17 +45,21 @@ public abstract class BaseServiceImpl<E extends BaseEntity, P extends BaseParam,
             for (String property : properties) {
                 Object value = metaObject.getValue(property);
                 //属性值不为空
-                if (value != null) {
-                SCondition sCondition = null;
-                try {
-                    sCondition = param.getClass().getDeclaredField(property).getAnnotation(SCondition.class); //在获取注解
-                } catch (NoSuchFieldException noSuchFieldException) {
-                    noSuchFieldException.printStackTrace();
-                }
+                if (value != null && StringUtils.isNotBlank(value.toString())) {
+                    SCondition sCondition = null;
+                    try {
+                        sCondition = param.getClass().getDeclaredField(property).getAnnotation(SCondition.class); //在获取注解
+                    } catch (NoSuchFieldException noSuchFieldException) {
+                        noSuchFieldException.printStackTrace();
+                    }
 
                     if (sCondition != null && "like".equals(sCondition.value())) {
-                        criteria.andLike(property, "%"+value+"%");
-                    } else {
+                        criteria.andLike(property, "%" + value + "%");
+                    } else if(sCondition != null && sCondition.value().endsWith("<")){
+                        criteria.andLessThanOrEqualTo(sCondition.value().replace("<",""), value);
+                    }else if(sCondition != null && sCondition.value().endsWith(">")){
+                        criteria.andGreaterThanOrEqualTo(sCondition.value().replace(">",""),value);
+                    }else {
                         criteria.andEqualTo(property, value);
                     }
 

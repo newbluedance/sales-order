@@ -1,5 +1,6 @@
 package com.licf.app.entity.dto;
 
+import com.common.authory.SCondition;
 import com.common.base.BaseParam;
 import com.common.validation.group.Add;
 import com.common.validation.group.Update;
@@ -85,8 +86,9 @@ public class UsrOrderParam extends BaseParam {
     @Length(max = 255, groups = {Update.class,Add.class}, message = "注释过长")
     private String comments;
 
+    @SCondition("createTime>")
     private LocalDateTime startTime;
-
+    @SCondition("createTime<")
     private LocalDateTime endTime;
 
 }

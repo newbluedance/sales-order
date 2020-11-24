@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class RedisHelper {
 
-    private static RedisTemplate<String, Object> redisTemplate = (RedisTemplate)SpringContextUtil.getBean("redisTemplate");
+    private static RedisTemplate<String, Object> redisTemplate = (RedisTemplate) SpringContextUtil.getBean("redisTemplate");
 
     private static BgGoodsMapper goodsMapper = SpringContextUtil.getBean(BgGoodsMapper.class);
 
@@ -32,7 +32,7 @@ public class RedisHelper {
             goods = goodsMapper.selectByPrimaryKey(id);
             redisTemplate.opsForValue().set(SystemConstant.GOOD_KEY_PREFIX.concat(String.valueOf(id)), goods);
             //redis失效时间24小时
-            redisTemplate.expire(SystemConstant.GOOD_KEY_PREFIX.concat(String.valueOf(id)), 3600000L*24,
+            redisTemplate.expire(SystemConstant.GOOD_KEY_PREFIX.concat(String.valueOf(id)), 3600000L * 24,
                     TimeUnit.MILLISECONDS);
         }
         return goods;
@@ -44,7 +44,7 @@ public class RedisHelper {
             dept = deptMapper.selectByPrimaryKey(id);
             redisTemplate.opsForValue().set(SystemConstant.DEPT_KEY_PREFIX.concat(String.valueOf(id)), dept);
             //redis失效时间24小时
-            redisTemplate.expire(SystemConstant.DEPT_KEY_PREFIX.concat(String.valueOf(id)), 3600000L*24,
+            redisTemplate.expire(SystemConstant.DEPT_KEY_PREFIX.concat(String.valueOf(id)), 3600000L * 24,
                     TimeUnit.MILLISECONDS);
         }
         return dept;
@@ -56,7 +56,7 @@ public class RedisHelper {
             banner = bgBannerMapper.selectByPrimaryKey(id);
             redisTemplate.opsForValue().set(SystemConstant.BANNER_KEY_PREFIX.concat(String.valueOf(id)), banner);
             //redis失效时间24小时
-            redisTemplate.expire(SystemConstant.BANNER_KEY_PREFIX.concat(String.valueOf(id)), 3600000L*24,
+            redisTemplate.expire(SystemConstant.BANNER_KEY_PREFIX.concat(String.valueOf(id)), 3600000L * 24,
                     TimeUnit.MILLISECONDS);
         }
         return banner;
@@ -68,21 +68,28 @@ public class RedisHelper {
             pubRole = roleMapper.selectByPrimaryKey(id);
             redisTemplate.opsForValue().set(SystemConstant.ROLE_KEY_PREFIX.concat(String.valueOf(id)), pubRole);
             //redis失效时间24小时
-            redisTemplate.expire(SystemConstant.ROLE_KEY_PREFIX.concat(String.valueOf(id)), 3600000L*24,
+            redisTemplate.expire(SystemConstant.ROLE_KEY_PREFIX.concat(String.valueOf(id)), 3600000L * 24,
                     TimeUnit.MILLISECONDS);
         }
         return pubRole;
     }
+
     public static PubModule getModule(Integer id) {
         PubModule pubModule = (PubModule) redisTemplate.opsForValue().get(SystemConstant.MODULE_KEY_PREFIX.concat(String.valueOf(id)));
         if (pubModule == null) {
             pubModule = moduleMapper.selectByPrimaryKey(id);
             redisTemplate.opsForValue().set(SystemConstant.MODULE_KEY_PREFIX.concat(String.valueOf(id)), pubModule);
             //redis失效时间24小时
-            redisTemplate.expire(SystemConstant.MODULE_KEY_PREFIX.concat(String.valueOf(id)), 3600000L*24,
+            redisTemplate.expire(SystemConstant.MODULE_KEY_PREFIX.concat(String.valueOf(id)), 3600000L * 24,
                     TimeUnit.MILLISECONDS);
         }
         return pubModule;
+    }
+
+    public static void clearRole(Integer[] ids) {
+        for (Integer id : ids) {
+            redisTemplate.delete(SystemConstant.ROLE_KEY_PREFIX.concat(String.valueOf(id)));
+        }
     }
 
     public static void clearGood(Integer id) {
@@ -92,6 +99,7 @@ public class RedisHelper {
     public static void clearDept(Integer id) {
         redisTemplate.delete(SystemConstant.DEPT_KEY_PREFIX.concat(String.valueOf(id)));
     }
+
     public static void clearBanner(Integer id) {
         redisTemplate.delete(SystemConstant.BANNER_KEY_PREFIX.concat(String.valueOf(id)));
     }
@@ -99,10 +107,13 @@ public class RedisHelper {
     /**
      * 清空redis
      */
-    public static void fluShall(){
-        Set<String> keys = redisTemplate.keys(SystemConstant.ROLE_KEY_PREFIX+"*");
-        keys.addAll(redisTemplate.keys(SystemConstant.MODULE_KEY_PREFIX+"*"));
-        keys.addAll(redisTemplate.keys(SystemConstant.MODULE_KEY_PREFIX+"**"));
+    public static void fluShall() {
+        Set<String> keys = redisTemplate.keys(SystemConstant.ROLE_KEY_PREFIX + "*");
+        keys.addAll(redisTemplate.keys(SystemConstant.ROLE_KEY_PREFIX + "**"));
+
+        keys.addAll(redisTemplate.keys(SystemConstant.MODULE_KEY_PREFIX + "*"));
+        keys.addAll(redisTemplate.keys(SystemConstant.MODULE_KEY_PREFIX + "**"));
+
         redisTemplate.delete(keys);
     }
 

@@ -1,10 +1,14 @@
 package com.licf.bgManage.controller;
 
+import com.common.BusinessException;
 import com.common.authory.RequiredPermission;
 import com.common.base.DivPageInfo;
+import com.common.constants.CodeConstant;
 import com.common.net.RestResponse;
+import com.common.utils.LoginUtils;
 import com.common.validation.group.Add;
 import com.common.validation.group.Update;
+import com.licf.bgManage.entity.BgEmployee;
 import com.licf.bgManage.entity.dto.BgEmployeeParam;
 import com.licf.bgManage.entity.dto.BgEmployeeResult;
 import com.licf.bgManage.enums.PermitEnum;
@@ -64,6 +68,21 @@ public class BgEmployeeController {
     @PutMapping
     @RequiredPermission(permit = PermitEnum.EmployeeUpdate)
     public RestResponse update(@Validated(Update.class) @RequestBody BgEmployeeParam param) {
+        bgEmployeeService.update(param);
+        return RestResponse.success();
+    }
+    /**
+     * 更新
+     *
+     * @param param 更新对象
+     * @return RestResponse
+     */
+    @PutMapping("/updateSelf")
+    @RequiredPermission(permit = PermitEnum.EmployeeUpdate)
+    public RestResponse updateSelf(@Validated(Update.class) @RequestBody BgEmployeeParam param) {
+        if(param.getId()!=LoginUtils.getLoginUser().getId()){
+            throw new BusinessException(CodeConstant.NO_PERMIT, "你没有权限修改别人的密码!");
+        }
         bgEmployeeService.update(param);
         return RestResponse.success();
     }

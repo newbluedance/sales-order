@@ -55,7 +55,8 @@ public enum PermitEnum {
     BannerQuery("横幅", "查询"),
     BannerUpdate("横幅", "修改"),
     ListModule("配置查询", "模块"),
-    ListPermit("配置查询", "权限");
+    ListPermit("配置查询", "权限"),
+    UpdateSelf("员工", "更新个人信息");
 
     private String module;
     private String permit;

@@ -196,7 +196,7 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
         super.initMapperConverter(usrOrderMapper, usrOrderConverter);
     }
 
-    @Override
+   /* @Override
     public DivPageInfo<UsrOrderResult> pageList(UsrOrderParam param, Pageable pageable) {
         UsrOrder entity = converter.paramToEntity(param);
         Example example = new Example(entity.getClass());
@@ -213,7 +213,7 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
 
         PageInfo<UsrOrder> pageInfo = PageHelper.startPage(pageable.getPageNumber(), pageable.getPageSize()).doSelectPageInfo(() -> mapper.selectByExample(example));
         return pageConverter(pageInfo);
-    }
+    }*/
 
     public static void main(String[] args) {
         //从物流公司获取单号及其他物流信息

@@ -58,6 +58,19 @@ public class BgEmployeeServiceImpl extends BaseServiceImpl<BgEmployee, BgEmploye
     }
 
     @Override
+    public void updateSelf(BgEmployeeParam param) {
+        BgEmployee bgEmployee = new BgEmployee();
+        if (StringUtils.isNotEmpty(param.getPassword())){
+            bgEmployee.setPassword(DigestUtils.md5Hex(param.getPassword()));
+        }
+        bgEmployee.setEmployeeName(param.getEmployeeName());
+        bgEmployee.setPhone(param.getPhone());
+        bgEmployeeMapper.updateByPrimaryKeySelective(bgEmployee);
+        // 清除用户存储在缓存中的权限信息
+        clearRedisAuthenticationInfo(bgEmployee.getAccount());
+    }
+
+    @Override
     public void deleteById(int id) {
         BgEmployee bgEmployee=new BgEmployee();
         bgEmployee.setId(id);
