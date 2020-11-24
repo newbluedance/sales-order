@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.MetaObjectUtil;
@@ -17,16 +18,11 @@ import java.util.List;
  */
 public abstract class BaseServiceImpl<E extends BaseEntity, P extends BaseParam, R extends BaseResult> implements BaseService<P, R> {
 
-    //    @Autowired
+    @Autowired
     protected BaseMapper<E> mapper;
 
-    //    @Autowired
+    @Autowired
     protected BaseConverter<E, P, R> converter;
-
-    public void initMapperConverter(BaseMapper<E> mapper, BaseConverter<E, P, R> converter) {
-        this.mapper = mapper;
-        this.converter = converter;
-    }
 
     @Override
     public List<R> list(P param) {
@@ -55,11 +51,11 @@ public abstract class BaseServiceImpl<E extends BaseEntity, P extends BaseParam,
 
                     if (sCondition != null && "like".equals(sCondition.value())) {
                         criteria.andLike(property, "%" + value + "%");
-                    } else if(sCondition != null && sCondition.value().endsWith("<")){
-                        criteria.andLessThanOrEqualTo(sCondition.value().replace("<",""), value);
-                    }else if(sCondition != null && sCondition.value().endsWith(">")){
-                        criteria.andGreaterThanOrEqualTo(sCondition.value().replace(">",""),value);
-                    }else {
+                    } else if (sCondition != null && sCondition.value().endsWith("<")) {
+                        criteria.andLessThanOrEqualTo(sCondition.value().replace("<", ""), value);
+                    } else if (sCondition != null && sCondition.value().endsWith(">")) {
+                        criteria.andGreaterThanOrEqualTo(sCondition.value().replace(">", ""), value);
+                    } else {
                         criteria.andEqualTo(property, value);
                     }
 

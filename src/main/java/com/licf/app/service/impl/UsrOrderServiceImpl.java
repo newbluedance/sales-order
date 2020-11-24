@@ -191,10 +191,7 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
         return true;
     }
 
-    @Autowired
-    public void init(UsrOrderMapper usrOrderMapper, UsrOrderConverter usrOrderConverter) {
-        super.initMapperConverter(usrOrderMapper, usrOrderConverter);
-    }
+
 
    /* @Override
     public DivPageInfo<UsrOrderResult> pageList(UsrOrderParam param, Pageable pageable) {

@@ -7,16 +7,12 @@ import com.common.utils.RedisHelper;
 import com.licf.app.entity.UsrCart;
 import com.licf.app.entity.dto.UsrCartParam;
 import com.licf.app.entity.dto.UsrCartResult;
-import com.licf.app.mapper.UsrCartMapper;
 import com.licf.app.mapperstruct.UsrCartConverter;
 import com.licf.app.service.UsrCartService;
-import com.licf.bgManage.entity.BgEmployee;
 import com.licf.bgManage.entity.dto.BgEmployeeResult;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,9 +75,6 @@ public class UsrCartServiceImpl extends BaseServiceImpl<UsrCart, UsrCartParam, U
         return true;
     }
 
-    @Autowired
-    public void init(UsrCartMapper usrCartMapper, UsrCartConverter usrCartConverter) {
-        super.initMapperConverter(usrCartMapper, usrCartConverter);
-    }
+
 
 }
