@@ -32,7 +32,7 @@ public class UsrOrderParam extends BaseParam {
     private List<UsrCartParam> goods;
 
     /** 所属业务员 */
-    private String salesman;
+    private Integer salesman;
 
     /** 客户名称 */
     @Length(max = 255, groups = {Update.class,Add.class}, message = "客户名称过长")

@@ -42,7 +42,7 @@ public class BgCustomer extends BaseEntity {
 
     /** 业务员 */
     @Column
-    private String salesman;
+    private Integer salesman;
 
     /** 注释 */
     @Column

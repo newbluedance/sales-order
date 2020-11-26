@@ -39,7 +39,7 @@ public class BgCustomerParam extends BaseParam {
 
     /** 业务员 */
     @Length(max = 255, groups = {Update.class,Add.class}, message = "业务员过长")
-    private String salesman;
+    private Integer salesman;
 
     /** 注释 */
     @Length(max = 255, groups = {Update.class,Add.class}, message = "注释过长")

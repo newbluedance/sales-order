@@ -80,7 +80,7 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
         usrOrder.setOrderAmount(orderAmount);
         usrOrder.setOrderNo(IdUtil.createIdByDate());
         usrOrder.setOrderGoodsShot(JSON.toJSONString(goodsShots));
-        usrOrder.setSalesman(loginUser.getAccount());
+        usrOrder.setSalesman(loginUser.getId());
         usrOrder.setCreateTime(LocalDateTime.now());
         usrOrder.setStatus(EOrderStatus.PENDING_LEADER_REVIEW);
         mapper.insert(usrOrder);

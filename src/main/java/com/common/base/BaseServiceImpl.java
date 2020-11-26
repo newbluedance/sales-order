@@ -63,7 +63,6 @@ public abstract class BaseServiceImpl<E extends BaseEntity, P extends BaseParam,
             }
         }
 
-
         example.setOrderByClause(formatSortString(pageable));
         /// ...doSelectPageInfo(() -> converter.entityToResult(mapper.selectByExample(example)));
         //上面这种写法不能真正转换类型,

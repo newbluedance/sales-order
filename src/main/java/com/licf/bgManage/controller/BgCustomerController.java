@@ -3,13 +3,16 @@ package com.licf.bgManage.controller;
 import com.common.authory.RequiredPermission;
 import com.common.base.DivPageInfo;
 import com.common.net.RestResponse;
+import com.common.utils.LoginUtils;
 import com.common.validation.group.Add;
 import com.common.validation.group.Update;
 import com.licf.bgManage.entity.dto.BgCustomerParam;
 import com.licf.bgManage.entity.dto.BgCustomerResult;
+import com.licf.bgManage.entity.dto.BgEmployeeResult;
 import com.licf.bgManage.enums.PermitEnum;
 import com.licf.bgManage.service.BgCustomerService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -41,6 +44,16 @@ public class BgCustomerController {
     @GetMapping
     @RequiredPermission(permit = PermitEnum.CustomerQuery)
     public RestResponse<DivPageInfo<BgCustomerResult>> page(BgCustomerParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        BgEmployeeResult loginUser = LoginUtils.getLoginUser();
+        if (ArrayUtils.contains(loginUser.getRoleIds(), 1)) {
+        } else if (ArrayUtils.contains(loginUser.getRoleIds(), 3)) {
+            // 如果是主管查看当前部门的
+            param.setDepartmentId(loginUser.getDepartmentId());
+        } else {
+            // 如果是业务员 查看自己的
+            param.setSalesman(loginUser.getId());
+        }
+
         return RestResponse.success(bgCustomerService.pageList(param, pageable));
     }
 
@@ -53,6 +66,9 @@ public class BgCustomerController {
     @PostMapping
     @RequiredPermission(permit = PermitEnum.CustomerInsert)
     public RestResponse insert(@Validated(Add.class) @RequestBody BgCustomerParam param) {
+        if (param.getSalesman() == null) {
+            param.setSalesman(LoginUtils.getLoginUser().getId());
+        }
         bgCustomerService.insert(param);
         return RestResponse.success();
     }

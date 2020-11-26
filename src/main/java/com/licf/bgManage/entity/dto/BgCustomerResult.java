@@ -30,7 +30,7 @@ public class BgCustomerResult extends BaseResult {
     private Integer departmentId;
 
     /** 业务员 */
-    private String salesman;
+    private Integer salesman;
 
     /** 注释 */
     private String comments;

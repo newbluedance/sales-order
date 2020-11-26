@@ -7,9 +7,11 @@ import com.common.utils.LoginUtils;
 import com.common.validation.group.Add;
 import com.licf.app.entity.dto.*;
 import com.licf.app.service.UsrOrderService;
+import com.licf.bgManage.entity.dto.BgEmployeeResult;
 import com.licf.bgManage.enums.EOrderStatus;
 import com.licf.bgManage.enums.PermitEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -40,7 +42,7 @@ public class UsrOrderController {
     @GetMapping("/querySelf")
     @RequiredPermission(permit = PermitEnum.OrderQuerySelf)
     public RestResponse<DivPageInfo<UsrOrderResult>> querySelf(UsrOrderParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        param.setSalesman(LoginUtils.getLoginUser().getAccount());
+        param.setSalesman(LoginUtils.getLoginUser().getId());
         return RestResponse.success(UsrOrderService.pageList(param, pageable));
     }
 
@@ -54,6 +56,15 @@ public class UsrOrderController {
     @GetMapping
     @RequiredPermission(permit = PermitEnum.OrderQuery)
     public RestResponse<DivPageInfo<UsrOrderResult>> page(UsrOrderParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        BgEmployeeResult loginUser = LoginUtils.getLoginUser();
+        if (ArrayUtils.contains(loginUser.getRoleIds(), 1)) {
+        } else if (ArrayUtils.contains(loginUser.getRoleIds(), 3)) {
+            // 如果是主管查看当前部门的
+            param.setDepartmentId(loginUser.getDepartmentId());
+        } else {
+            // 如果是业务员 查看自己的
+            param.setSalesman(loginUser.getId());
+        }
         return RestResponse.success(UsrOrderService.pageList(param, pageable));
     }
 

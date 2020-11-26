@@ -32,7 +32,7 @@ public class UsrOrderResult extends BaseResult {
     private String phone;
 
     /** 所属业务员 */
-    private String salesman;
+    private Integer salesman;
 
     /** 所属部门 */
     private Integer departmentId;

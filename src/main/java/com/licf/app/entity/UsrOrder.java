@@ -44,7 +44,7 @@ public class UsrOrder extends BaseEntity {
 
     /** 所属业务员 */
     @Column
-    private String salesman;
+    private Integer salesman;
 
     /** 所属部门 */
     @Column
