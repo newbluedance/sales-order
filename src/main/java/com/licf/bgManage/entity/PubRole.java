@@ -2,6 +2,7 @@ package com.licf.bgManage.entity;
 
 import com.common.base.BaseEntity;
 import javax.persistence.Column;
+import com.common.view.Title;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -18,12 +19,12 @@ public class PubRole extends BaseEntity {
 
     private static final long serialVersionUID = 47916364235084577L;
 
-    /** ID主键自增 */
+    @Title("ID")
     @Id
     @GeneratedValue(generator = "JDBC")
     private Integer id;
 
-    /** 角色名称 */
+    @Title("角色名称")
     @Column
     private String roleName;
 
@@ -33,7 +34,7 @@ public class PubRole extends BaseEntity {
     @Column
     private Integer[] moduleIds;
 
-    /** 排序字段 */
+    @Title("排序字段")
     @Column
     private Integer orderNum;
 }

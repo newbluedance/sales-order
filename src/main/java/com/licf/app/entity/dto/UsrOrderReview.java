@@ -5,6 +5,7 @@ import com.common.validation.group.Add;
 import com.common.validation.group.Update;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import com.common.view.Title;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -18,14 +19,14 @@ import java.util.List;
 @Data
 public class UsrOrderReview {
 
-    /** ID主键自增 */
+    @Title("ID")
     @NotNull(message = "id不能为空!")
     private Integer id;
 
-    /** 审核结果 */
+    @Title("审核结果")
     private boolean pass;
 
-    /** 原因 */
+    @Title("原因")
     @Length(max = 255, groups = {Update.class,Add.class}, message = "原因过长")
     private String reason;
 

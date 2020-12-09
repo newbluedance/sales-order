@@ -1,5 +1,6 @@
 package com.common.utils;
 
+import com.common.view.Title;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class SpringContextUtil implements ApplicationContextAware {
-    /** Spring应用上下文 */
+    @Title("Spring应用上下文")
     private static ApplicationContext applicationContext;
 
     /**

@@ -38,7 +38,7 @@ public class PubCategoryController {
      */
     @GetMapping
     @RequiredPermission(permit = PermitEnum.CategoryQuery)
-    public RestResponse<DivPageInfo<PubCategoryResult>> page(PubCategoryParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public RestResponse<DivPageInfo<PubCategoryResult>> page(PubCategoryParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return RestResponse.success(pubCategoryService.pageList(param, pageable));
     }
 

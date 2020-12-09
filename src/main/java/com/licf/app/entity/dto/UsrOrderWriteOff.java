@@ -3,6 +3,7 @@ package com.licf.app.entity.dto;
 import com.licf.bgManage.enums.EOrderStatus;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import com.common.view.Title;
 
 import javax.validation.constraints.NotNull;
 
@@ -14,14 +15,14 @@ import javax.validation.constraints.NotNull;
 @Data
 public class UsrOrderWriteOff {
 
-    /** ID主键自增 */
+    @Title("ID")
     @NotNull(message = "id不能为空!")
     private Integer id;
 
-    /** 状态 */
+    @Title("状态")
     private EOrderStatus status;
 
-    /** 原因 */
+    @Title("原因")
     @Length(max = 255, message = "原因过长")
     private String reason;
 

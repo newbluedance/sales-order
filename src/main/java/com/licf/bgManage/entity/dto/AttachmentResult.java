@@ -1,6 +1,7 @@
 package com.licf.bgManage.entity.dto;
 
 import com.common.base.BaseResult;
+import com.common.view.Title;
 import lombok.Data;
 
 /**
@@ -12,31 +13,31 @@ public class AttachmentResult extends BaseResult {
 
     private static final long serialVersionUID = 84176589575271294L;
 
-    /** ID主键自增 */
+    @Title("ID")
     private Integer id;
 
-    /** 对应数据所在模块 */
+    @Title("对应数据所在模块")
     private String moduleName;
 
-    /** 对应数据编号(有一个或多个其他关联id组成) */
+    @Title("对应数据编号(有一个或多个其他关联id组成)")
     private String moduleDataCode;
 
-    /** 对应数据的附件类型 */
+    @Title("对应数据的附件类型")
     private String moduleFileType;
 
-    /** 文件名称 */
+    @Title("文件名称")
     private String fileName;
 
-    /** 大小 */
+    @Title("大小")
     private Long fileSize;
 
-    /** 文件排序 */
+    @Title("文件排序")
     private Integer fileOrder;
 
-    /** 文件完整路径 */
+    @Title("文件完整路径")
     private String filePath;
 
-    /** 备注 */
+    @Title("备注")
     private String remark;
 
 }

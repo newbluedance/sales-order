@@ -3,6 +3,7 @@ package com.licf.bgManage.entity;
 import com.common.base.BaseEntity;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
+import com.common.view.Title;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -19,40 +20,43 @@ public class PubModule extends BaseEntity {
 
     private static final long serialVersionUID = 87761081099032484L;
 
-    /** ID主键自增 */
+    @Title("ID")
     @Id
     @GeneratedValue(generator = "JDBC")
     private Integer id;
 
-    /** 路径 */
+    @Title("路径")
     @Column
     private String path;
 
-    /** 名称 */
+    @Column
+    private String href;
+
+    @Title("名称")
     @Column
     private String name;
 
-    /** 图标 */
+    @Title("图标")
     @Column
     private String icon;
 
-    /**  */
+    @Title("")
     @Column
     private Integer parentId;
 
-    /** 创建时间 */
+    @Title("创建时间")
     @Column
     private LocalDateTime createTime;
 
-    /** 创建人 */
+    @Title("创建人")
     @Column
     private String createdBy;
 
-    /** 更新时间 */
+    @Title("更新时间")
     @Column
     private LocalDateTime updateTime;
 
-    /** 更新人 */
+    @Title("更新人")
     @Column
     private String updatedBy;
 }

@@ -42,6 +42,10 @@ public abstract class BaseServiceImpl<E extends BaseEntity, P extends BaseParam,
                 Object value = metaObject.getValue(property);
                 //属性值不为空
                 if (value != null && StringUtils.isNotBlank(value.toString())) {
+                    if (value.equals("deleted")) {
+                        criteria.andNotEqualTo("deleted", 1);
+                    }
+
                     SCondition sCondition = null;
                     try {
                         sCondition = param.getClass().getDeclaredField(property).getAnnotation(SCondition.class); //在获取注解

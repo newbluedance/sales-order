@@ -38,7 +38,7 @@ public class PubRoleController {
      */
    @GetMapping
     @RequiredPermission(permit = PermitEnum.RoleQuery)
-    public RestResponse<DivPageInfo<PubRoleResult>> page(PubRoleParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public RestResponse<DivPageInfo<PubRoleResult>> page(PubRoleParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return RestResponse.success(pubRoleService.pageList(param, pageable));
     }
 

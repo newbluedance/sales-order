@@ -6,9 +6,9 @@ import com.common.base.DivPageInfo;
 import com.common.constants.CodeConstant;
 import com.common.net.RestResponse;
 import com.common.utils.LoginUtils;
+import com.common.utils.RedisHelper;
 import com.common.validation.group.Add;
 import com.common.validation.group.Update;
-import com.licf.bgManage.entity.BgEmployee;
 import com.licf.bgManage.entity.dto.BgEmployeeParam;
 import com.licf.bgManage.entity.dto.BgEmployeeResult;
 import com.licf.bgManage.enums.PermitEnum;
@@ -42,7 +42,7 @@ public class BgEmployeeController {
      */
     @GetMapping
     @RequiredPermission(permit = PermitEnum.EmployeeQuery)
-    public RestResponse<DivPageInfo<BgEmployeeResult>> page(BgEmployeeParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public RestResponse<DivPageInfo<BgEmployeeResult>> page(BgEmployeeParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return RestResponse.success(bgEmployeeService.pageList(param, pageable));
     }
 
@@ -68,9 +68,11 @@ public class BgEmployeeController {
     @PutMapping
     @RequiredPermission(permit = PermitEnum.EmployeeUpdate)
     public RestResponse update(@Validated(Update.class) @RequestBody BgEmployeeParam param) {
+        RedisHelper.clearEmployee(param.getId());
         bgEmployeeService.update(param);
         return RestResponse.success();
     }
+
     /**
      * 更新
      *
@@ -78,12 +80,13 @@ public class BgEmployeeController {
      * @return RestResponse
      */
     @PutMapping("/updateSelf")
-    @RequiredPermission(permit = PermitEnum.EmployeeUpdate)
+    @RequiredPermission(permit = PermitEnum.UpdateSelf)
     public RestResponse updateSelf(@Validated(Update.class) @RequestBody BgEmployeeParam param) {
-        if(param.getId()!=LoginUtils.getLoginUser().getId()){
+        if (!param.getId().equals(LoginUtils.getLoginUser().getId())) {
             throw new BusinessException(CodeConstant.NO_PERMIT, "你没有权限修改别人的密码!");
         }
-        bgEmployeeService.update(param);
+        RedisHelper.clearEmployee(param.getId());
+        bgEmployeeService.updateSelf(param);
         return RestResponse.success();
     }
 
@@ -96,6 +99,7 @@ public class BgEmployeeController {
     @DeleteMapping("/{id}")
     @RequiredPermission(permit = PermitEnum.EmployeeDelete)
     public RestResponse deleteBgEmployee(@PathVariable int id) {
+        RedisHelper.clearEmployee(id);
         bgEmployeeService.deleteById(id);
         return RestResponse.success();
     }

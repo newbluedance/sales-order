@@ -37,7 +37,7 @@ public class PubPayModeController {
      */
    @GetMapping
     @RequiredPermission(permit = PermitEnum.PayModeQuery)
-    public RestResponse<DivPageInfo<PubPayModeResult>> page(PubPayModeParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public RestResponse<DivPageInfo<PubPayModeResult>> page(PubPayModeParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return RestResponse.success(pubPayModeService.pageList(param, pageable));
     }
 

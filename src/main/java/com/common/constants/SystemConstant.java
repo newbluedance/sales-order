@@ -12,7 +12,9 @@ public interface SystemConstant {
     String DEPT_KEY_PREFIX="dept_";
     String BANNER_KEY_PREFIX="banner_";
     String ROLE_KEY_PREFIX="role_";
+    String EMPLOYEE_KEY_PREFIX="employee_";
     String MODULE_KEY_PREFIX="module_";
+    String LOGISTICS_KEY_PREFIX="logistics_";
 
     String REDIS_KEY_CAPTCHA = "captcha_";
 

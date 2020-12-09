@@ -24,7 +24,11 @@ public class RedisHelper {
 
     private static PubRoleMapper roleMapper = SpringContextUtil.getBean(PubRoleMapper.class);
 
+    private static BgEmployeeMapper employeeMapper = SpringContextUtil.getBean(BgEmployeeMapper.class);
+
     private static PubModuleMapper moduleMapper = SpringContextUtil.getBean(PubModuleMapper.class);
+
+    private static BgLogisticsMapper logisticsMapper = SpringContextUtil.getBean(BgLogisticsMapper.class);
 
     public static BgGoods getGood(Integer id) {
         BgGoods goods = (BgGoods) redisTemplate.opsForValue().get(SystemConstant.GOOD_KEY_PREFIX.concat(String.valueOf(id)));
@@ -74,6 +78,18 @@ public class RedisHelper {
         return pubRole;
     }
 
+    public static BgEmployee getEmployee(Integer id) {
+        BgEmployee bgEmployee = (BgEmployee) redisTemplate.opsForValue().get(SystemConstant.EMPLOYEE_KEY_PREFIX.concat(String.valueOf(id)));
+        if (bgEmployee == null) {
+            bgEmployee = employeeMapper.selectByPrimaryKey(id);
+            redisTemplate.opsForValue().set(SystemConstant.EMPLOYEE_KEY_PREFIX.concat(String.valueOf(id)), bgEmployee);
+            //redis失效时间24小时
+            redisTemplate.expire(SystemConstant.EMPLOYEE_KEY_PREFIX.concat(String.valueOf(id)), 3600000L * 24,
+                    TimeUnit.MILLISECONDS);
+        }
+        return bgEmployee;
+    }
+
     public static PubModule getModule(Integer id) {
         PubModule pubModule = (PubModule) redisTemplate.opsForValue().get(SystemConstant.MODULE_KEY_PREFIX.concat(String.valueOf(id)));
         if (pubModule == null) {
@@ -84,6 +100,22 @@ public class RedisHelper {
                     TimeUnit.MILLISECONDS);
         }
         return pubModule;
+    }
+
+    public static BgLogistics getLogistics(Integer id) {
+        BgLogistics logistics = (BgLogistics) redisTemplate.opsForValue().get(SystemConstant.LOGISTICS_KEY_PREFIX.concat(String.valueOf(id)));
+        if (logistics == null) {
+            logistics = logisticsMapper.selectByPrimaryKey(id);
+            redisTemplate.opsForValue().set(SystemConstant.LOGISTICS_KEY_PREFIX.concat(String.valueOf(id)), logistics);
+            //redis失效时间24小时
+            redisTemplate.expire(SystemConstant.LOGISTICS_KEY_PREFIX.concat(String.valueOf(id)), 3600000L * 24,
+                    TimeUnit.MILLISECONDS);
+        }
+        return logistics;
+    }
+
+    public static void clearEmployee(Integer id) {
+        redisTemplate.delete(SystemConstant.EMPLOYEE_KEY_PREFIX.concat(String.valueOf(id)));
     }
 
     public static void clearRole(Integer[] ids) {
@@ -104,6 +136,10 @@ public class RedisHelper {
         redisTemplate.delete(SystemConstant.BANNER_KEY_PREFIX.concat(String.valueOf(id)));
     }
 
+    public static void clearLogistics(Integer id) {
+        redisTemplate.delete(SystemConstant.LOGISTICS_KEY_PREFIX.concat(String.valueOf(id)));
+    }
+
     /**
      * 清空redis
      */
@@ -113,6 +149,9 @@ public class RedisHelper {
 
         keys.addAll(redisTemplate.keys(SystemConstant.MODULE_KEY_PREFIX + "*"));
         keys.addAll(redisTemplate.keys(SystemConstant.MODULE_KEY_PREFIX + "**"));
+
+        keys.addAll(redisTemplate.keys(SystemConstant.GOOD_KEY_PREFIX + "*"));
+        keys.addAll(redisTemplate.keys(SystemConstant.GOOD_KEY_PREFIX + "**"));
 
         redisTemplate.delete(keys);
     }

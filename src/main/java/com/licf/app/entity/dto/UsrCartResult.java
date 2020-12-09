@@ -1,6 +1,7 @@
 package com.licf.app.entity.dto;
 
 import com.common.base.BaseResult;
+import com.common.view.Title;
 import com.licf.bgManage.entity.BgGoods;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ public class UsrCartResult extends BaseResult {
 
     private static final long serialVersionUID = 33124488757434213L;
 
-    /** 商品信息 */
+    @Title("商品信息")
     private Integer goodId;
 
     private BgGoods good;

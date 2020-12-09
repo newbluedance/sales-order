@@ -1,11 +1,14 @@
 package com.licf.bgManage.entity.dto;
 
 import com.common.base.BaseResult;
-import java.time.LocalDateTime;
+import com.common.utils.RedisHelper;
+import com.common.view.Title;
+import com.licf.bgManage.entity.BgDepartment;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
- * 
  * @author lichunfeng
  * @date 2020-08-24 18:34:54
  */
@@ -14,39 +17,58 @@ public class BgCustomerResult extends BaseResult {
 
     private static final long serialVersionUID = 28212764319486588L;
 
-    /** ID主键自增 */
+    @Title("ID")
     private Integer id;
 
-    /** 客户名称 */
+    @Title("客户名称")
     private String customerName;
 
-    /** 手机号 */
+    @Title("手机号")
     private String phone;
 
-    /** 地址 */
+    //收货人省份
+    private String province;
+    //收货人城市
+    private String city;
+    //收货人区县
+    private String county;
+
+    @Title("地址")
     private String address;
 
-    /** 所属部门id */
+    @Title("所属部门id")
     private Integer departmentId;
 
-    /** 业务员 */
+    @Title("业务员")
     private Integer salesman;
 
-    /** 注释 */
+    @Title("注释")
     private String comments;
 
-    /** 删除标志 */
+    @Title("删除标志")
     private Integer deleted;
 
-    /** 创建时间 */
+    @Title("创建时间")
     private LocalDateTime createTime;
 
-    /** 创建人 */
+    @Title("创建人")
     private String createdBy;
 
-    /** 更新时间 */
+    @Title("更新时间")
     private LocalDateTime updateTime;
 
-    /** 更新人 */
+    @Title("更新人")
     private String updatedBy;
+
+    private String departmentName;
+
+    public String getDepartmentName() {
+        if (departmentId != null) {
+            BgDepartment dept = RedisHelper.getDept(departmentId);
+            if (dept != null) {
+                return dept.getDepartmentName();
+            }
+        }
+        return null;
+    }
 }

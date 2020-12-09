@@ -1,6 +1,7 @@
 package com.licf.bgManage.entity.dto;
 
 import com.common.base.BaseResult;
+import com.common.view.Title;
 import lombok.Data;
 
 /**
@@ -13,15 +14,15 @@ public class PubCategoryResult extends BaseResult {
 
     private static final long serialVersionUID = 71244753321940153L;
 
-    /** ID主键自增 */
+    @Title("ID")
     private Integer id;
 
-    /** 类别名称名称 */
+    @Title("类别名称名称")
     private String categoryName;
 
-    /** 父级 */
+    @Title("父级")
     private Integer parentId;
 
-    /** 排序字段 */
+    @Title("排序字段")
     private Integer orderNum;
 }

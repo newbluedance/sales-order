@@ -41,7 +41,7 @@ public class UsrOrderController {
      */
     @GetMapping("/querySelf")
     @RequiredPermission(permit = PermitEnum.OrderQuerySelf)
-    public RestResponse<DivPageInfo<UsrOrderResult>> querySelf(UsrOrderParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public RestResponse<DivPageInfo<UsrOrderResult>> querySelf(UsrOrderParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         param.setSalesman(LoginUtils.getLoginUser().getId());
         return RestResponse.success(UsrOrderService.pageList(param, pageable));
     }
@@ -55,7 +55,7 @@ public class UsrOrderController {
      */
     @GetMapping
     @RequiredPermission(permit = PermitEnum.OrderQuery)
-    public RestResponse<DivPageInfo<UsrOrderResult>> page(UsrOrderParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public RestResponse<DivPageInfo<UsrOrderResult>> page(UsrOrderParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         BgEmployeeResult loginUser = LoginUtils.getLoginUser();
         if (ArrayUtils.contains(loginUser.getRoleIds(), 1)) {
         } else if (ArrayUtils.contains(loginUser.getRoleIds(), 3)) {
@@ -118,6 +118,18 @@ public class UsrOrderController {
     public RestResponse deliverReview(@Validated @RequestBody UsrOrderReview param) {
         UsrOrderService.review(param, EOrderStatus.PENDING_DELIVER_REVIEW);
         return RestResponse.success();
+    }
+
+    /**
+     * 生成单号
+     *
+     * @param param 订单号
+     * @return RestResponse
+     */
+    @PostMapping("/generateMailNo")
+    @RequiredPermission(permit = PermitEnum.OrderDeliver)
+    RestResponse generateMailNo(@Validated @RequestBody UsrOrderDeliver param) {
+        return RestResponse.success(UsrOrderService.generateMailNo(param));
     }
 
     /**

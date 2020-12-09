@@ -1,5 +1,6 @@
 package com.licf.app.entity.dto;
 
+import com.common.view.Title;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -22,9 +23,11 @@ public class UsrOrderGoodsShot {
 
     private Integer num;
 
-    /** 规格 */
+    private Double weight;
+
+    @Title("规格")
     private String specifications;
 
-    /** 单位 */
+    @Title("单位")
     private String unit;
 }

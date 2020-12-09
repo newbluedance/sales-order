@@ -2,6 +2,7 @@ package com.licf.app.entity;
 
 import com.common.base.BaseEntity;
 import javax.persistence.Column;
+import com.common.view.Title;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -18,11 +19,11 @@ public class UsrCart extends BaseEntity {
 
     private static final long serialVersionUID = 66910163744106222L;
 
-    /** 员工id */
+    @Title("员工id")
     @Id
     private Integer employeeId;
 
-    /** 商品信息 */
+    @Title("商品信息")
     @Column
     private String goods;
 }

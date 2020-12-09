@@ -1,6 +1,7 @@
 package com.licf.bgManage.entity.dto;
 
 import com.common.base.BaseResult;
+import com.common.view.Title;
 import lombok.Data;
 
 /**
@@ -13,12 +14,12 @@ public class PubPayModeResult extends BaseResult {
 
     private static final long serialVersionUID = 36786509525550433L;
 
-    /** ID主键自增 */
+    @Title("ID")
     private Integer id;
 
-    /** 角色名称 */
+    @Title("角色名称")
     private String roleName;
 
-    /** 排序字段 */
+    @Title("排序字段")
     private Integer orderNum;
 }

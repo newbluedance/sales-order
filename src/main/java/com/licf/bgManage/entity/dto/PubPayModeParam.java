@@ -5,6 +5,7 @@ import com.common.validation.group.Add;
 import com.common.validation.group.Update;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import com.common.view.Title;
 
 /**
  * 
@@ -16,13 +17,13 @@ public class PubPayModeParam extends BaseParam {
 
     private static final long serialVersionUID = 52121068053887649L;
 
-    /** ID主键自增 */
+    @Title("ID")
     private Integer id;
 
-    /** 角色名称 */
+    @Title("角色名称")
     @Length(max = 255, groups = {Update.class,Add.class}, message = "角色名称过长")
     private String roleName;
 
-    /** 排序字段 */
+    @Title("排序字段")
     private Integer orderNum;
 }

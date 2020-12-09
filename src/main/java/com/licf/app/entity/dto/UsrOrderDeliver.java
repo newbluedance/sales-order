@@ -5,6 +5,7 @@ import com.common.validation.group.Add;
 import com.common.validation.group.Update;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import com.common.view.Title;
 
 import javax.validation.constraints.NotNull;
 
@@ -16,18 +17,20 @@ import javax.validation.constraints.NotNull;
 @Data
 public class UsrOrderDeliver {
 
-    /** ID主键自增 */
+    @Title("ID")
     @NotNull(message = "id不能为空!")
     private Integer id;
 
-    /** 拒绝 */
+    @Title("拒绝")
     private boolean reject;
+
+    private Integer logisticsId;
 
     private String logisticsName;
 
     private String logisticsNo;
 
-    /** 原因 */
+    @Title("原因")
     @Length(max = 255, groups = {Update.class,Add.class}, message = "原因过长")
     private String reason;
 

@@ -1,5 +1,6 @@
 package com.common;
 
+import com.common.view.Title;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,7 +12,7 @@ import lombok.EqualsAndHashCode;
 public class BusinessException extends RuntimeException {
 
     private static final long serialVersionUID = -4435979898433185113L;
-    /** code */
+    @Title("code")
     private String code;
     public BusinessException(String code, String message) {
         super(message);

@@ -11,11 +11,11 @@ public class DbPackageInfo {
     //货物名称
     private String cargoName;
     //总件数（包裹数）
-    private String totalNumber;
+    private Integer totalNumber;
     //总重量
-    private String totalWeight;
+    private double totalWeight;
     //总体积
-    private String totalVolume;
+    private double totalVolume;
     //包装
     private String packageService;
     //送货方式

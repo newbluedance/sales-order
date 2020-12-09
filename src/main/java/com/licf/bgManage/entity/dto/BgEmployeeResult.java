@@ -2,6 +2,7 @@ package com.licf.bgManage.entity.dto;
 
 import com.common.base.BaseResult;
 import com.common.utils.RedisHelper;
+import com.common.view.Title;
 import com.licf.bgManage.entity.BgDepartment;
 import com.licf.bgManage.entity.PubRole;
 import com.licf.bgManage.enums.PermitEnum;
@@ -24,37 +25,41 @@ public class BgEmployeeResult extends BaseResult {
 
     private static final long serialVersionUID = 52843144704117635L;
 
-    /** ID主键自增 */
+    @Title("ID")
     private Integer id;
 
-    /** 姓名 */
+    @Title("姓名")
     private String employeeName;
 
-    /** 手机号 */
+    @Title("手机号")
     private String phone;
 
-    /** 账号 */
+    @Title("账号")
     private String account;
 
-    /** 密码 */
 //    private String password;
 
-    /** 所属部门id */
+    @Title("所属部门id")
     private Integer departmentId;
 
-    /** 职位 */
+    @Title("所属部门名称")
+    private String departmentName;
+
+    @Title("职位")
     private String position;
 
-    /** 角色id */
+    @Title("角色id")
     private Integer[] roleIds;
 
-    /** 状态 */
+    @Title("状态")
     private String status;
 
-    /** 注释 */
+    @Title("注释")
     private String comments;
 
-   private String token;
+    private String token;
+
+
 
     public String getDepartmentName() {
         if (departmentId != null) {

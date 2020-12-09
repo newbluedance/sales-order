@@ -40,7 +40,7 @@ public class BgDepartmentController {
      */
     @GetMapping
     @RequiredPermission(permit = PermitEnum.DepartmentQuery)
-    public RestResponse<DivPageInfo<BgDepartmentResult>> page(BgDepartmentParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public RestResponse<DivPageInfo<BgDepartmentResult>> page(BgDepartmentParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return RestResponse.success(bgDepartmentService.pageList(param, pageable));
     }
 

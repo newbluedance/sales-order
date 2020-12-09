@@ -5,6 +5,7 @@ import com.licf.bgManage.enums.EOrderStatus;
 import lombok.Data;
 
 import javax.persistence.Column;
+import com.common.view.Title;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -21,92 +22,113 @@ public class UsrOrder extends BaseEntity {
 
     private static final long serialVersionUID = 65964423391715014L;
 
-    /** ID主键自增 */
+    @Title("ID")
     @Id
     @GeneratedValue(generator = "JDBC")
     private Integer id;
 
-    /** 订单编号 */
+    @Title("订单编号")
     @Column
     private String orderNo;
 
-    /** 订单商品快照 */
+    @Title("订单商品快照")
     @Column
     private String orderGoodsShot;
 
-    /** 客户名称 */
+    @Title("客户名称")
     @Column
     private String customerName;
 
-    /** 手机号 */
+    @Title("手机号")
     @Column
     private String phone;
 
-    /** 所属业务员 */
+    @Title("所属业务员")
     @Column
     private Integer salesman;
 
-    /** 所属部门 */
+    @Title("所属部门")
     @Column
     private Integer departmentId;
 
-    /** 订单金额 */
+    @Title("订单金额")
     @Column
     private BigDecimal orderAmount;
 
-    /** 实际金额 */
+    @Column
+    private Double weight;
+
+    @Title("实际金额")
     @Column
     private BigDecimal actualAmount;
 
-    /** 支付方式 */
+    @Title("支付方式")
     @Column
     private String payMode;
 
-    /** 收货人 */
+    @Title("收货人")
     @Column
     private String receiver;
 
-    /** 收货地址 */
+    @Title("收货人电话")
+    @Column
+    private String receiverPhone;
+
+    //收货人省份
+    @Column
+    private String province;
+    //收货人城市
+    @Column
+    private String city;
+    //收货人区县
+    @Column
+    private String county;
+
+    @Title("收货地址")
     @Column
     private String address;
 
-    /** 物流编号 */
+    @Title("物流编号")
     @Column
-    private String logisticsId;
+    private Integer logisticsId;
 
-    /** 物流名称 */
+    @Title("物流名称")
     @Column
     private String logisticsName;
 
-    /** 物流单号 */
+    @Title("物流单号")
     @Column
     private String logisticsNo;
 
-    /** 订单状态 */
+    @Title("大头笔信息")
+    @Column
+    private String arrivedOrgSimpleName;
+
+    @Title("订单状态")
     @Column
     private EOrderStatus status;
 
-    /** 原因 */
+    @Title("原因")
     @Column
     private String reason;
 
-    /** 注释 */
+    @Title("注释")
     @Column
     private String comments;
 
-    /** 删除标志 */
+    @Title("删除标志")
     @Column
     private Integer deleted;
 
-    /** 创建时间 */
+    @Title("创建时间")
     @Column
     private LocalDateTime createTime;
 
-    /** 更新时间 */
+    @Title("更新时间")
     @Column
     private LocalDateTime updateTime;
 
-    /** 更新人 */
+    @Title("更新人")
     @Column
     private String updatedBy;
 

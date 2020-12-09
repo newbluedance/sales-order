@@ -48,21 +48,24 @@ public class BgEmployeeServiceImpl extends BaseServiceImpl<BgEmployee, BgEmploye
             bgEmployee.setPassword(DigestUtils.md5Hex(param.getPassword()));
         }
         bgEmployeeMapper.updateByPrimaryKeySelective(bgEmployee);
+        BgEmployee selectOne = mapper.selectOne(bgEmployee);
         // 清除用户存储在缓存中的权限信息
-        clearRedisAuthenticationInfo(bgEmployee.getAccount());
+        clearRedisAuthenticationInfo(selectOne.getAccount());
     }
 
     @Override
     public void updateSelf(BgEmployeeParam param) {
         BgEmployee bgEmployee = new BgEmployee();
+        bgEmployee.setId(param.getId());
         if (StringUtils.isNotEmpty(param.getPassword())){
             bgEmployee.setPassword(DigestUtils.md5Hex(param.getPassword()));
         }
         bgEmployee.setEmployeeName(param.getEmployeeName());
         bgEmployee.setPhone(param.getPhone());
         bgEmployeeMapper.updateByPrimaryKeySelective(bgEmployee);
+        BgEmployee selectOne = mapper.selectOne(bgEmployee);
         // 清除用户存储在缓存中的权限信息
-        clearRedisAuthenticationInfo(bgEmployee.getAccount());
+        clearRedisAuthenticationInfo(selectOne.getAccount());
     }
 
     @Override
@@ -71,8 +74,9 @@ public class BgEmployeeServiceImpl extends BaseServiceImpl<BgEmployee, BgEmploye
         bgEmployee.setId(id);
         bgEmployee.setDeleted(1);
         mapper.updateByPrimaryKeySelective(bgEmployee);
+        BgEmployee selectOne = mapper.selectOne(bgEmployee);
         // 清除用户存储在缓存中的权限信息
-        clearRedisAuthenticationInfo(bgEmployee.getAccount());
+        clearRedisAuthenticationInfo(selectOne.getAccount());
     }
 
 }

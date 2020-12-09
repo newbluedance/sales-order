@@ -4,6 +4,7 @@ import com.common.base.BaseResult;
 import java.time.LocalDateTime;
 
 import com.common.utils.RedisHelper;
+import com.common.view.Title;
 import com.licf.bgManage.entity.BgBanner;
 import com.licf.bgManage.entity.BgDepartment;
 import lombok.Data;
@@ -18,25 +19,25 @@ public class BgBannerResult extends BaseResult {
 
     private static final long serialVersionUID = 45780439568207778L;
 
-    /** ID主键自增 */
+    @Title("ID")
     private Integer id;
 
-    /** 图片 */
+    @Title("图片")
     private String img;
 
-    /** 排序 */
+    @Title("排序")
     private Integer orderNum;
 
-    /** 创建时间 */
+    @Title("创建时间")
     private LocalDateTime createTime;
 
-    /** 创建人 */
+    @Title("创建人")
     private String createdBy;
 
-    /** 更新时间 */
+    @Title("更新时间")
     private LocalDateTime updateTime;
 
-    /** 更新人 */
+    @Title("更新人")
     private String updatedBy;
 
     public String getImg() {

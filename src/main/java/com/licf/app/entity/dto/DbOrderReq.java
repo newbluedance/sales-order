@@ -2,6 +2,8 @@ package com.licf.app.entity.dto;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author: licf
  * @time: 2020/10/10 15:13
@@ -15,10 +17,10 @@ public class DbOrderReq {
     //运单号
     private String mailNo;
     //是否需要订阅轨迹
-    private String needTraceInfo;
+    private Integer needTraceInfo;
     //第三方接入商的公司编码
     private String companyCode;
-    //下单模式
+    //下单模式 1.散客模式 2、 大客户模式 3、同步筛单下单
     private String orderType;
     //运输方式/产品类型
     private String transportType;
@@ -32,14 +34,16 @@ public class DbOrderReq {
     private DbPackageInfo packageInfo;
     //订单提交时间
     private String gmtCommit;
-    //支付方式
+    //支付方式 0:发货人付款（现付） 1:收货人付款（到付） 2：发货人付款（月结）
     private String payType;
+    //增值服务
+    private DbAddService addServices;
     //短信通知
     private String smsNotify;
     //上门接货开始时间
-    private String sendStartTime;
+    private Date sendStartTime;
     //上门接货结束时间
-    private String sendEndTime;
+    private Date sendEndTime;
     //原运单号
     private String originalWaybillNumber;
     //备注

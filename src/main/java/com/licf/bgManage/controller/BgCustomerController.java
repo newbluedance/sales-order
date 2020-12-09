@@ -43,7 +43,7 @@ public class BgCustomerController {
      */
     @GetMapping
     @RequiredPermission(permit = PermitEnum.CustomerQuery)
-    public RestResponse<DivPageInfo<BgCustomerResult>> page(BgCustomerParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public RestResponse<DivPageInfo<BgCustomerResult>> page(BgCustomerParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         BgEmployeeResult loginUser = LoginUtils.getLoginUser();
         if (ArrayUtils.contains(loginUser.getRoleIds(), 1)) {
         } else if (ArrayUtils.contains(loginUser.getRoleIds(), 3)) {

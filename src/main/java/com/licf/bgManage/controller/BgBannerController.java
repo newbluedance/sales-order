@@ -41,7 +41,7 @@ public class BgBannerController {
      */
     @GetMapping
     @RequiredPermission(permit = PermitEnum.BannerQuery)
-    public RestResponse<DivPageInfo<BgBannerResult>> page(BgBannerParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public RestResponse<DivPageInfo<BgBannerResult>> page(BgBannerParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return RestResponse.success(bgBannerService.pageList(param, pageable));
     }
 

@@ -6,6 +6,7 @@ import com.common.validation.group.Update;
 import java.time.LocalDateTime;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import com.common.view.Title;
 
 /**
  * 
@@ -17,26 +18,26 @@ public class BgBannerParam extends BaseParam {
 
     private static final long serialVersionUID = 77023638625421596L;
 
-    /** ID主键自增 */
+    @Title("ID")
     private Integer id;
 
-    /** 图片 */
+    @Title("图片")
     private String img;
 
-    /** 排序 */
+    @Title("排序")
     private Integer orderNum;
 
-    /** 创建时间 */
+    @Title("创建时间")
     private LocalDateTime createTime;
 
-    /** 创建人 */
+    @Title("创建人")
     @Length(max = 255, groups = {Update.class,Add.class}, message = "创建人过长")
     private String createdBy;
 
-    /** 更新时间 */
+    @Title("更新时间")
     private LocalDateTime updateTime;
 
-    /** 更新人 */
+    @Title("更新人")
     @Length(max = 255, groups = {Update.class,Add.class}, message = "更新人过长")
     private String updatedBy;
 }

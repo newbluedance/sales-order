@@ -9,6 +9,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.LocalDate;
@@ -30,12 +31,19 @@ public class WebMvcConfiguration {
     @Bean
     public WebMvcConfigurer webConfigurer() {
         return new WebMvcConfigurer() {
-            @Override
             public void addInterceptors(InterceptorRegistry registry) {
                 // 可添加多个
                 registry.addInterceptor(loginInterceptor()).addPathPatterns("/**").excludePathPatterns("/error","/system/login","/system/logout")
-                        .excludePathPatterns("/");
+                        .excludePathPatterns("/view/**","/lib/**","/css/**","/js/**","/images/**","/**.html");
             }
+
+            @Override
+            public void addResourceHandlers(ResourceHandlerRegistry registry) {
+                //静态资源释放
+                registry.addResourceHandler("/**")
+                        .addResourceLocations("classpath:/static/","classpath:/templates/");
+            }
+
 
         };
     }

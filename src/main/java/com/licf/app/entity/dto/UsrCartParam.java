@@ -7,6 +7,7 @@ import com.common.validation.group.Update;
 import com.fasterxml.jackson.core.JsonParser;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import com.common.view.Title;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
 @Data
 public class UsrCartParam extends BaseParam {
 
-    /** 商品信息 */
+    @Title("商品信息")
     private Integer goodId;
 
     private int num;

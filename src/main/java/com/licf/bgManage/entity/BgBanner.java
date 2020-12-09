@@ -3,6 +3,7 @@ package com.licf.bgManage.entity;
 import com.common.base.BaseEntity;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
+import com.common.view.Title;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -19,32 +20,32 @@ public class BgBanner extends BaseEntity {
 
     private static final long serialVersionUID = 20920387903681933L;
 
-    /** ID主键自增 */
+    @Title("ID")
     @Id
     @GeneratedValue(generator = "JDBC")
     private Integer id;
 
-    /** 图片 */
+    @Title("图片")
     @Column
     private String img;
 
-    /** 排序 */
+    @Title("排序")
     @Column
     private Integer orderNum;
 
-    /** 创建时间 */
+    @Title("创建时间")
     @Column
     private LocalDateTime createTime;
 
-    /** 创建人 */
+    @Title("创建人")
     @Column
     private String createdBy;
 
-    /** 更新时间 */
+    @Title("更新时间")
     @Column
     private LocalDateTime updateTime;
 
-    /** 更新人 */
+    @Title("更新人")
     @Column
     private String updatedBy;
 }

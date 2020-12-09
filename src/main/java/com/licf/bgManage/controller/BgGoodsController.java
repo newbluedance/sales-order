@@ -39,7 +39,7 @@ public class BgGoodsController {
      */
    @GetMapping
     @RequiredPermission(permit = PermitEnum.GoodsQuery)
-    public RestResponse<DivPageInfo<BgGoodsResult>> page(BgGoodsParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public RestResponse<DivPageInfo<BgGoodsResult>> page(BgGoodsParam param, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return RestResponse.success(bgGoodsService.pageList(param, pageable));
     }
 
