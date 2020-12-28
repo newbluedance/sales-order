@@ -4,6 +4,7 @@ import com.common.base.BaseResult;
 import com.common.utils.RedisHelper;
 import com.common.view.Title;
 import com.licf.bgManage.entity.BgDepartment;
+import com.licf.bgManage.entity.BgEmployee;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -67,6 +68,16 @@ public class BgCustomerResult extends BaseResult {
             BgDepartment dept = RedisHelper.getDept(departmentId);
             if (dept != null) {
                 return dept.getDepartmentName();
+            }
+        }
+        return null;
+    }
+
+    public String getSalesmanName() {
+        if (salesman != null) {
+            BgEmployee employee = RedisHelper.getEmployee(salesman);
+            if (employee != null) {
+                return employee.getEmployeeName();
             }
         }
         return null;

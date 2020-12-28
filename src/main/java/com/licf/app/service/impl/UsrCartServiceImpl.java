@@ -48,7 +48,7 @@ public class UsrCartServiceImpl extends BaseServiceImpl<UsrCart, UsrCartParam, U
             List<UsrCartParam> goods = new ArrayList<>(1);
             goods.add(param);
             cart.setGoods(JSON.toJSON(goods).toString());
-            mapper.insert(cart);
+            mapper.insertSelective(cart);
         } else {
             String goodStrs = cart.getGoods();
             List<UsrCartParam> goods = JSON.parseArray(goodStrs, UsrCartParam.class);
@@ -64,7 +64,7 @@ public class UsrCartServiceImpl extends BaseServiceImpl<UsrCart, UsrCartParam, U
                     break;
                 }
             }
-            if (!contain) {
+            if (!contain && param.getNum() > 0) {
                 goods.add(param);
             }
 
@@ -74,7 +74,6 @@ public class UsrCartServiceImpl extends BaseServiceImpl<UsrCart, UsrCartParam, U
         }
         return true;
     }
-
 
 
 }

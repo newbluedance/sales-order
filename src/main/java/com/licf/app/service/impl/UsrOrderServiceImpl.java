@@ -81,9 +81,8 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
         usrOrder.setOrderGoodsShot(JSON.toJSONString(goodsShots));
         usrOrder.setWeight(orderWeight);
         usrOrder.setSalesman(loginUser.getId());
-        usrOrder.setCreateTime(LocalDateTime.now());
         usrOrder.setStatus(EOrderStatus.PENDING_LEADER_REVIEW);
-        mapper.insert(usrOrder);
+        mapper.insertSelective(usrOrder);
         return true;
     }
 

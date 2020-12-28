@@ -65,6 +65,7 @@ public class UsrOrderController {
             // 如果是业务员 查看自己的
             param.setSalesman(loginUser.getId());
         }
+        //select * from usr_order where JSON_CONTAINS(json_extract(order_goods_shot,'$[*].goodName') ,'"清温解毒散"','$')
         return RestResponse.success(UsrOrderService.pageList(param, pageable));
     }
 

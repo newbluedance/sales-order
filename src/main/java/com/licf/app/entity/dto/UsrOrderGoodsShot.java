@@ -30,4 +30,13 @@ public class UsrOrderGoodsShot {
 
     @Title("单位")
     private String unit;
+
+    public Double getWeight() {
+        if (weight == null && com.common.utils.RedisHelper.getGood(getGoodId()) != null) {
+            return com.common.utils.RedisHelper.getGood(getGoodId()).getWeight();
+        }
+        return weight;
+    }
+
+
 }

@@ -7,6 +7,7 @@ import com.licf.bgManage.entity.dto.BgGoodsParam;
 import com.licf.bgManage.entity.dto.BgGoodsResult;
 import com.licf.app.entity.dto.UsrOrderGoodsShot;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 public interface BgGoodsConverter extends BaseConverter<BgGoods, BgGoodsParam, BgGoodsResult> {
     BgGoodsConverter INSTANCE = Mappers.getMapper(BgGoodsConverter.class);
 
+    @Mapping(target = "weight", expression = "java(com.common.utils.RedisHelper.getGood(param.getGoodId()).getWeight())")
     UsrOrderGoodsShot paramToShot(UsrCartParam param);
 
     List<UsrOrderGoodsShot> paramToShot(List<UsrCartParam> params);

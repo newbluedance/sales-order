@@ -69,6 +69,9 @@ public class BgCustomerController {
         if (param.getSalesman() == null) {
             param.setSalesman(LoginUtils.getLoginUser().getId());
         }
+        if (param.getDepartmentId() == null) {
+            param.setDepartmentId(LoginUtils.getLoginUser().getDepartmentId());
+        }
         bgCustomerService.insert(param);
         return RestResponse.success();
     }
