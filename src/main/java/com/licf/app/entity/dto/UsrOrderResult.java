@@ -85,7 +85,7 @@ public class UsrOrderResult extends BaseResult {
     private EOrderStatus status;
 
     @Title("原因")
-    private String reason;
+    private String[] reason;
 
     @Title("注释")
     private String comments;

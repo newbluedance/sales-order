@@ -8,10 +8,7 @@ import com.common.utils.DopUtil;
 import com.common.utils.IdUtil;
 import com.common.utils.LoginUtils;
 import com.common.utils.RedisHelper;
-import com.deppon.dop.module.sdk.shared.domain.result.ResultDO;
-import com.deppon.dop.module.sdk.shared.util.FastJsonUtil;
-import com.deppon.dop.module.sdk.shared.util.HttpUtils;
-import com.deppon.dop.module.sdk.shared.util.SecurityUtil;
+import com.common.view.Title;
 import com.licf.app.entity.UsrCart;
 import com.licf.app.entity.UsrOrder;
 import com.licf.app.entity.dto.*;
@@ -22,17 +19,16 @@ import com.licf.bgManage.entity.BgGoods;
 import com.licf.bgManage.entity.dto.BgEmployeeResult;
 import com.licf.bgManage.enums.EOrderStatus;
 import com.licf.bgManage.mapperstruct.BgGoodsConverter;
-import org.apache.commons.httpclient.NameValuePair;
+import lombok.SneakyThrows;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * @author lichunfeng
@@ -87,19 +83,22 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
     }
 
     @Override
-    public boolean review(UsrOrderReview param, EOrderStatus curStatus) {
+    public boolean review(UsrOrderReview param, EOrderStatus curStatus) throws NoSuchFieldException {
         UsrOrder curOrder = mapper.selectByPrimaryKey(param.getId());
         if (curStatus != curOrder.getStatus()) {
             throw new BusinessException(CodeConstant.UNDIFINE, "订单已不是待审核状态!");
         }
+        // 获取注解
+        String prefix = EOrderStatus.class.getField(curStatus.name()).getAnnotation(Title.class).value() + ":";
 
         UsrOrder usrOrder = new UsrOrder();
         usrOrder.setId(param.getId());
-        if (param.isPass()) {
-            usrOrder.setStatus(curStatus.next());
+        usrOrder.setStatus(param.isPass() ? curStatus.next() : curStatus.reject());
+
+        if (usrOrder.getReason() == null) {
+            usrOrder.setReason(new String[]{prefix + param.getReason()});
         } else {
-            usrOrder.setStatus(curStatus.reject());
-            usrOrder.setReason(param.getReason());
+            usrOrder.setReason(ArrayUtils.add(usrOrder.getReason(), prefix + param.getReason()));
         }
         mapper.updateByPrimaryKeySelective(usrOrder);
         return true;
@@ -107,18 +106,19 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
     }
 
     @Override
-    public boolean deliver(UsrOrderDeliver param) {
+    public boolean deliver(UsrOrderDeliver param) throws NoSuchFieldException {
         UsrOrder curOrder = mapper.selectByPrimaryKey(param.getId());
         EOrderStatus curStatus = curOrder.getStatus();
         if (EOrderStatus.PENDING_DELIVER != curStatus) {
             throw new BusinessException(CodeConstant.UNDIFINE, "订单已不是待发货状态!");
         }
+        // 获取注解
+        String prefix = EOrderStatus.class.getField(curStatus.name()).getAnnotation(Title.class).value() + ":";
 
         UsrOrder usrOrder = new UsrOrder();
         usrOrder.setId(param.getId());
         if (param.isReject()) {
             usrOrder.setStatus(curStatus.reject());
-            usrOrder.setReason(param.getReason());
         } else {
             usrOrder.setStatus(curStatus.next());
             usrOrder.setLogisticsId(param.getLogisticsId());
@@ -127,10 +127,16 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
                 usrOrder.setLogisticsNo(param.getLogisticsNo());
             }
         }
+        if (usrOrder.getReason() == null) {
+            usrOrder.setReason(new String[]{prefix + param.getReason()});
+        } else {
+            usrOrder.setReason(ArrayUtils.add(usrOrder.getReason(), prefix + param.getReason()));
+        }
         mapper.updateByPrimaryKeySelective(usrOrder);
         return true;
     }
 
+    @SneakyThrows
     @Override
     public boolean writeOff(UsrOrderWriteOff param) {
         UsrOrder curOrder = mapper.selectByPrimaryKey(param.getId());
@@ -153,7 +159,15 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
         UsrOrder usrOrder = new UsrOrder();
         usrOrder.setId(param.getId());
         usrOrder.setStatus(param.getStatus());
-        usrOrder.setReason(param.getReason());
+
+
+        // 获取注解
+        String prefix = EOrderStatus.class.getField(param.getStatus().name()).getAnnotation(Title.class).value() + ":";
+        if (usrOrder.getReason() == null) {
+            usrOrder.setReason(new String[]{prefix + param.getReason()});
+        } else {
+            usrOrder.setReason(ArrayUtils.add(usrOrder.getReason(), prefix + param.getReason()));
+        }
 
         mapper.updateByPrimaryKeySelective(usrOrder);
         return true;
@@ -238,10 +252,6 @@ public class UsrOrderServiceImpl extends BaseServiceImpl<UsrOrder, UsrOrderParam
             throw new BusinessException(CodeConstant.UNDIFINE, dbOrderResp.getReason());
         }
     }
-
-
-
-
 
 
 }

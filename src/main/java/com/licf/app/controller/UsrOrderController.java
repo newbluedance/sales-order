@@ -90,7 +90,7 @@ public class UsrOrderController {
      */
     @PostMapping("/leaderReview")
     @RequiredPermission(permit = PermitEnum.leaderReview)
-    public RestResponse leaderReview(@Validated @RequestBody UsrOrderReview param) {
+    public RestResponse leaderReview(@Validated @RequestBody UsrOrderReview param) throws NoSuchFieldException {
         UsrOrderService.review(param, EOrderStatus.PENDING_LEADER_REVIEW);
         return RestResponse.success();
     }
@@ -103,7 +103,7 @@ public class UsrOrderController {
      */
     @PostMapping("/storageReview")
     @RequiredPermission(permit = PermitEnum.storageReview)
-    public RestResponse storageReview(@Validated @RequestBody UsrOrderReview param) {
+    public RestResponse storageReview(@Validated @RequestBody UsrOrderReview param) throws NoSuchFieldException {
         UsrOrderService.review(param, EOrderStatus.PENDING_STORAGE_REVIEW);
         return RestResponse.success();
     }
@@ -116,7 +116,7 @@ public class UsrOrderController {
      */
     @PostMapping("/deliverReview")
     @RequiredPermission(permit = PermitEnum.deliverReview)
-    public RestResponse deliverReview(@Validated @RequestBody UsrOrderReview param) {
+    public RestResponse deliverReview(@Validated @RequestBody UsrOrderReview param) throws NoSuchFieldException {
         UsrOrderService.review(param, EOrderStatus.PENDING_DELIVER_REVIEW);
         return RestResponse.success();
     }
@@ -141,7 +141,7 @@ public class UsrOrderController {
      */
     @PostMapping("/deliver")
     @RequiredPermission(permit = PermitEnum.OrderDeliver)
-    public RestResponse deliver(@Validated @RequestBody UsrOrderDeliver param) {
+    public RestResponse deliver(@Validated @RequestBody UsrOrderDeliver param) throws NoSuchFieldException {
         UsrOrderService.deliver(param);
         return RestResponse.success();
     }

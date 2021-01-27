@@ -1,11 +1,11 @@
 package com.licf.app.entity;
 
 import com.common.base.BaseEntity;
+import com.common.view.Title;
 import com.licf.bgManage.enums.EOrderStatus;
 import lombok.Data;
 
 import javax.persistence.Column;
-import com.common.view.Title;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -110,9 +110,9 @@ public class UsrOrder extends BaseEntity {
 
     @Title("原因")
     @Column
-    private String reason;
+    private String[] reason;
 
-    @Title("注释")
+    @Title("备注")
     @Column
     private String comments;
 

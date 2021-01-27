@@ -13,11 +13,11 @@ public interface UsrOrderService extends BaseService<UsrOrderParam, UsrOrderResu
 
     boolean add(UsrOrderParam param);
 
-    boolean review(UsrOrderReview param, EOrderStatus curStatus);
+    boolean review(UsrOrderReview param, EOrderStatus curStatus) throws NoSuchFieldException;
 
     UsrOrder generateMailNo(UsrOrderDeliver param);
 
-    boolean deliver(UsrOrderDeliver param);
+    boolean deliver(UsrOrderDeliver param) throws NoSuchFieldException;
 
     boolean writeOff(UsrOrderWriteOff param);
 }

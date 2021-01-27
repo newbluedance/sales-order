@@ -33,15 +33,15 @@ public class WebMvcConfiguration {
         return new WebMvcConfigurer() {
             public void addInterceptors(InterceptorRegistry registry) {
                 // 可添加多个
-                registry.addInterceptor(loginInterceptor()).addPathPatterns("/**").excludePathPatterns("/error","/system/login","/system/logout")
-                        .excludePathPatterns("/view/**","/lib/**","/css/**","/js/**","/images/**","/**.html");
+                registry.addInterceptor(loginInterceptor()).addPathPatterns("/**").excludePathPatterns("/error", "/system/login", "/system/logout")
+                        .excludePathPatterns("/view/**", "/lib/**", "/css/**", "/js/**", "/images/**", "/**.html");
             }
 
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
                 //静态资源释放
-                registry.addResourceHandler("/**")
-                        .addResourceLocations("classpath:/static/","classpath:/templates/");
+                registry.addResourceHandler("/**", "/images/**")
+                        .addResourceLocations("classpath:/static/", "classpath:/templates/", "classpath:/images/","/images/");
             }
 
 
@@ -53,14 +53,14 @@ public class WebMvcConfiguration {
         return new Converter<String, LocalDateTime>() {
             @Override
             public LocalDateTime convert(String source) {
-                source=StringUtils.trim(source);
+                source = StringUtils.trim(source);
                 DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 try {
-                    return LocalDateTime.parse(source,format);
+                    return LocalDateTime.parse(source, format);
                 } catch (Exception e1) {
-                    format =DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                    format = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                     try {
-                        return LocalDateTime.parse(source,format);
+                        return LocalDateTime.parse(source, format);
                     } catch (Exception e2) {
                         format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                         try {
@@ -77,6 +77,7 @@ public class WebMvcConfiguration {
 
     /**
      * cors过滤器,设置允许跨域
+     *
      * @return cors过滤器
      */
     @Bean

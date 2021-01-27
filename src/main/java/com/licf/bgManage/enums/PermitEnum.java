@@ -46,7 +46,7 @@ public enum PermitEnum {
     OrderQuerySelf("订单", "查看自己的订单"),
     OrderQuery("订单", "查看所有订单"),
     leaderReview("订单", "主管审核"),
-    storageReview("订单", "审核员审核"),
+    storageReview("订单", "后勤审核"),
     deliverReview("订单", "发货员审核"),
     OrderDeliver("订单", "发货"),
     OrderWriteOff("订单", "财务核销"),

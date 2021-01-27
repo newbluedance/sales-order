@@ -41,7 +41,7 @@ public class SalesOrderApplication {
     MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
         //2.该处就是指定的路径
-        String bootPath = new ApplicationHome(getClass()).getSource().getParent().concat(File.separator) + "uploadtmp";
+        String bootPath = new ApplicationHome(getClass()).getSource().getParent().concat(File.separator) + "images";
         try {
             FileUtils.forceMkdir(new File(bootPath));
         } catch (IOException e) {
