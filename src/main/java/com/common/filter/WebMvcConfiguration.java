@@ -33,7 +33,7 @@ public class WebMvcConfiguration {
         return new WebMvcConfigurer() {
             public void addInterceptors(InterceptorRegistry registry) {
                 // 可添加多个
-                registry.addInterceptor(loginInterceptor()).addPathPatterns("/**").excludePathPatterns("/error", "/system/login", "/system/logout")
+                registry.addInterceptor(loginInterceptor()).addPathPatterns("/**").excludePathPatterns("/error", "/system/login", "/system/logout","/apiDoc")
                         .excludePathPatterns("/view/**", "/lib/**", "/css/**", "/js/**", "/images/**", "/**.html");
             }
 
